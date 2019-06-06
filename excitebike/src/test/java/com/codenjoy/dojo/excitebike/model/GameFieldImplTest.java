@@ -25,6 +25,7 @@ package com.codenjoy.dojo.excitebike.model;
 
 import com.codenjoy.dojo.excitebike.model.items.Hero;
 import com.codenjoy.dojo.excitebike.services.Events;
+import com.codenjoy.dojo.excitebike.services.parse.MapParserImpl;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
@@ -64,7 +65,7 @@ public class GameFieldImplTest {
     }
 
     private void givenFl(String board, int fieldHeight) {
-        LevelImpl level = new LevelImpl(board, fieldHeight);
+        MapParserImpl level = new MapParserImpl(board, fieldHeight);
         Hero hero = level.getHeroes().get(0);
 
         game = new GameFieldImpl(level, dice);

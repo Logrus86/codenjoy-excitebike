@@ -2,7 +2,7 @@ package com.codenjoy.dojo.excitebike.model.level;
 
 import com.codenjoy.dojo.excitebike.model.items.Elements;
 import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardType;
-import com.codenjoy.dojo.excitebike.model.LevelImpl;
+import com.codenjoy.dojo.excitebike.services.parse.MapParserImpl;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.printer.CharElements;
 import com.google.common.collect.Lists;
@@ -21,11 +21,11 @@ import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
  * Created by Pavel Bobylev 6/4/2019
  */
 @RunWith(Parameterized.class)
-public class LevelTest {
+public class MapParserTest {
 
     private CharElements element;
 
-    public LevelTest(CharElements element) {
+    public MapParserTest(CharElements element) {
         this.element = element;
     }
 
@@ -57,7 +57,7 @@ public class LevelTest {
                 "     " +
                 element.ch() + "    ";
         int fieldHeight = 5;
-        LevelImpl mapParser = new LevelImpl(map, fieldHeight);
+        MapParserImpl mapParser = new MapParserImpl(map, fieldHeight);
 
         //when
         List<PointImpl> result = callTestMethod(mapParser);
@@ -85,7 +85,7 @@ public class LevelTest {
                 element.ch() + element.ch() + element.ch() +
                 element.ch() + element.ch() + element.ch();
         int fieldHeight = 3;
-        LevelImpl mapParser = new LevelImpl(map, fieldHeight);
+        MapParserImpl mapParser = new MapParserImpl(map, fieldHeight);
 
         //when
         List<PointImpl> result = callTestMethod(mapParser);
@@ -128,7 +128,7 @@ public class LevelTest {
                 "   " + element.ch() + " " +
                 "  " + element.ch() + element.ch() + " ";
         int fieldHeight = 5;
-        LevelImpl mapParser = new LevelImpl(map, fieldHeight);
+        MapParserImpl mapParser = new MapParserImpl(map, fieldHeight);
 
         //when
         List<PointImpl> result = callTestMethod(mapParser);
@@ -152,7 +152,7 @@ public class LevelTest {
         String map = "" + element.ch() + element.ch() + element.ch() +
                 element.ch() + element.ch() + element.ch();
         int fieldHeight = 3;
-        LevelImpl mapParser = new LevelImpl(map, fieldHeight);
+        MapParserImpl mapParser = new MapParserImpl(map, fieldHeight);
 
         //when
         List<PointImpl> result = callTestMethod(mapParser);
@@ -179,7 +179,7 @@ public class LevelTest {
         assertThat(result.get(5).getY(), is(0));
     }
 
-    private <T extends PointImpl> List<T> callTestMethod(LevelImpl mapParser) {
+    private <T extends PointImpl> List<T> callTestMethod(MapParserImpl mapParser) {
         if (element == Elements.BORDER) {
             return (List<T>) mapParser.getBorders();
         } else if (element == Elements.ACCELERATOR) {

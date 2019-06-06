@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.excitebike.model;
+package com.codenjoy.dojo.excitebike.services.parse;
 
 /*-
  * #%L
@@ -42,12 +42,12 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class LevelImpl implements Level {
+public class MapParserImpl implements MapParser {
 
     private String map;
     private int xSize;
 
-    public LevelImpl(String map, int xSize) {
+    public MapParserImpl(String map, int xSize) {
         this.map = map;
         this.xSize = xSize;
     }

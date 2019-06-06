@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.excitebike.model;
+package com.codenjoy.dojo.excitebike.services.parse;
 
 /*-
  * #%L
@@ -33,7 +33,7 @@ import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardElement;
 
 import java.util.List;
 
-public interface Level {
+public interface MapParser {
 
     int getXSize();
 

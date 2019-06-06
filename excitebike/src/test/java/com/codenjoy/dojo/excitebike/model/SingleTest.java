@@ -24,6 +24,8 @@ package com.codenjoy.dojo.excitebike.model;
 
 
 import com.codenjoy.dojo.excitebike.services.Events;
+import com.codenjoy.dojo.excitebike.services.parse.MapParser;
+import com.codenjoy.dojo.excitebike.services.parse.MapParserImpl;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
@@ -54,7 +56,7 @@ public class SingleTest {
     // появляется другие игроки, игра становится мультипользовательской
     @Before
     public void setup() {
-        Level level = new LevelImpl(
+        MapParser mapParser = new MapParserImpl(
                 "☼☼☼☼☼☼" +
                 "☼   $☼" +
                 "☼    ☼" +
@@ -63,7 +65,7 @@ public class SingleTest {
                 "☼☼☼☼☼☼", 6);
 
         dice = mock(Dice.class);
-        field = new GameFieldImpl(level, dice);
+        field = new GameFieldImpl(mapParser, dice);
         PrinterFactory factory = new PrinterFactoryImpl();
 
         listener1 = mock(EventListener.class);

@@ -29,8 +29,8 @@ import com.codenjoy.dojo.excitebike.client.Board;
 import com.codenjoy.dojo.excitebike.client.ai.AISolver;
 import com.codenjoy.dojo.excitebike.model.items.Elements;
 import com.codenjoy.dojo.excitebike.model.GameFieldImpl;
-import com.codenjoy.dojo.excitebike.model.Level;
-import com.codenjoy.dojo.excitebike.model.LevelImpl;
+import com.codenjoy.dojo.excitebike.services.parse.MapParser;
+import com.codenjoy.dojo.excitebike.services.parse.MapParserImpl;
 import com.codenjoy.dojo.excitebike.model.Player;
 import com.codenjoy.dojo.services.AbstractGameType;
 import com.codenjoy.dojo.services.EventListener;
@@ -52,10 +52,10 @@ public class GameRunner extends AbstractGameType implements GameType {
     public static final int EMPTY_LINES_ON_TOP = 3;
     public static final int FIELD_HEIGHT = 38;
 
-    private final Level level;
+    private final MapParser mapParser;
 
     public GameRunner() {
-        level = new LevelImpl(getMap(), FIELD_HEIGHT);
+        mapParser = new MapParserImpl(getMap(), FIELD_HEIGHT);
     }
 
     protected String getMap() {
@@ -91,12 +91,12 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public GameField createGame(int levelNumber) {
-        return new GameFieldImpl(level, getDice());
+        return new GameFieldImpl(mapParser, getDice());
     }
 
     @Override
     public Parameter<Integer> getBoardSize() {
-        return v(level.getXSize());
+        return v(mapParser.getXSize());
     }
 
     @Override
