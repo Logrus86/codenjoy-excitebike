@@ -60,7 +60,7 @@ public class SingleTest {
                 "☼    ☼" +
                 "☼    ☼" +
                 "☼    ☼" +
-                "☼☼☼☼☼☼");
+                "☼☼☼☼☼☼", 6);
 
         dice = mock(Dice.class);
         field = new GameFieldImpl(level, dice);

@@ -82,16 +82,16 @@ public class GameFieldImpl implements GameField {
     }
 
     public int size() {
-        return level.getSize();
+        return level.getXSize();
     }
 
     @Override
     public boolean isBarrier(int x, int y) {
         Point pt = pt(x, y);
-        return x > level.getSize() - 1
+        return x > level.getXSize() - 1
                 || x < 0
                 || y < 0
-                || y > level.getSize() - 1
+                || y > level.getXSize() - 1
                 //|| walls.contains(pt)
                 || getHeroes().contains(pt);
     }
@@ -103,8 +103,8 @@ public class GameFieldImpl implements GameField {
         int y;
         int c = 0;
         do {
-            x = dice.next(level.getSize());
-            y = dice.next(level.getSize());
+            x = dice.next(level.getXSize());
+            y = dice.next(level.getXSize());
         } while (!isFree(x, y) && c++ < 100);
 
         if (c >= 100) {
@@ -179,7 +179,7 @@ public class GameFieldImpl implements GameField {
 
             @Override
             public int size() {
-                return level.getSize();
+                return level.getXSize();
             }
 
             @Override

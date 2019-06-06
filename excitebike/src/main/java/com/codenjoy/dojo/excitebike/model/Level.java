@@ -33,12 +33,11 @@ import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardElement;
 
 import java.util.List;
 
-/**
- * Я вот для простоты и удобства хочу указывать борду в тестовом виде, а реализация этого интерфейса позволяет мне это сделать
- */
 public interface Level {
 
-    int getSize();
+    int getXSize();
+
+    int getYSize();
 
     //TODO adjust in scope of the 'Bike' task
     List<Hero> getHeroes();

@@ -50,23 +50,23 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     //TODO: move it to the Board class
     public static final int EMPTY_LINES_ON_TOP = 3;
-    public static final int FIELD_LENGTH = 38;
+    public static final int FIELD_HEIGHT = 38;
 
     private final Level level;
 
     public GameRunner() {
-        level = new LevelImpl(getMap());
+        level = new LevelImpl(getMap(), FIELD_HEIGHT);
     }
 
     protected String getMap() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < EMPTY_LINES_ON_TOP; i++) {
-            appendElementManyTimes(sb, Elements.NONE, FIELD_LENGTH);
+            appendElementManyTimes(sb, Elements.NONE, FIELD_HEIGHT);
         }
-        appendElementManyTimes(sb, Elements.BORDER, FIELD_LENGTH);
+        appendElementManyTimes(sb, Elements.BORDER, FIELD_HEIGHT);
         appendBikeAtStartPoint(sb);
         appendBikeAtStartPoint(sb);
-        appendElementManyTimes(sb, Elements.BORDER, FIELD_LENGTH);
+        appendElementManyTimes(sb, Elements.BORDER, FIELD_HEIGHT);
         return sb.toString();
     }
 
@@ -80,7 +80,7 @@ public class GameRunner extends AbstractGameType implements GameType {
         sb.append(Elements.ROAD);
         sb.append(Elements.BIKE_BACK);
         sb.append(Elements.BIKE_FRONT);
-        appendElementManyTimes(sb, Elements.ROAD, FIELD_LENGTH - 3);
+        appendElementManyTimes(sb, Elements.ROAD, FIELD_HEIGHT - 3);
     }
 
     @Override
@@ -96,7 +96,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public Parameter<Integer> getBoardSize() {
-        return v(level.getSize());
+        return v(level.getXSize());
     }
 
     @Override

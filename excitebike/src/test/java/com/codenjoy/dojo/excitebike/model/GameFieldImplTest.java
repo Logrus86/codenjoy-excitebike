@@ -63,9 +63,9 @@ public class GameFieldImplTest {
         }
     }
 
-    private void givenFl(String board) {
-        LevelImpl level = new LevelImpl(board);
-        Hero hero = level.getHero().get(0);
+    private void givenFl(String board, int fieldHeight) {
+        LevelImpl level = new LevelImpl(board, fieldHeight);
+        Hero hero = level.getHeroes().get(0);
 
         game = new GameFieldImpl(level, dice);
         listener = mock(EventListener.class);
@@ -88,7 +88,8 @@ public class GameFieldImplTest {
                 "☼   ☼" +
                 "☼ ☺ ☼" +
                 "☼   ☼" +
-                "☼☼☼☼☼");
+                "☼☼☼☼☼",
+                5);
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -104,7 +105,8 @@ public class GameFieldImplTest {
                 "☼   ☼" +
                 "☼ ☺ ☼" +
                 "☼   ☼" +
-                "☼☼☼☼☼");
+                "☼☼☼☼☼",
+                5);
 
         hero.left();
         game.tick();
@@ -150,7 +152,8 @@ public class GameFieldImplTest {
                 "☼   ☼" +
                 "☼  ☺☼" +
                 "☼   ☼" +
-                "☼☼☼☼☼");
+                "☼☼☼☼☼",
+                5);
 
         hero.left();
         game.tick();
@@ -177,7 +180,8 @@ public class GameFieldImplTest {
                 "☼   ☼" +
                 "☼  ☺☼" +
                 "☼   ☼" +
-                "☼☼☼☼☼");
+                "☼☼☼☼☼",
+                5);
 
         hero.right();
         game.tick();
@@ -195,7 +199,8 @@ public class GameFieldImplTest {
                 "☼   ☼" +
                 "☼☺  ☼" +
                 "☼   ☼" +
-                "☼☼☼☼☼");
+                "☼☼☼☼☼",
+                5);
 
         hero.left();
         game.tick();
@@ -213,7 +218,8 @@ public class GameFieldImplTest {
                 "☼ ☼ ☼" +
                 "☼ ☺ ☼" +
                 "☼   ☼" +
-                "☼☼☼☼☼");
+                "☼☼☼☼☼",
+                5);
 
         hero.up();
         game.tick();
@@ -231,7 +237,8 @@ public class GameFieldImplTest {
                 "☼   ☼" +
                 "☼ ☺ ☼" +
                 "☼ ☼ ☼" +
-                "☼☼☼☼☼");
+                "☼☼☼☼☼",
+                5);
 
         hero.down();
         game.tick();
@@ -250,7 +257,8 @@ public class GameFieldImplTest {
                 "☼   ☼" +
                 "☼ ☺ ☼" +
                 "☼   ☼" +
-                "☼☼☼☼☼");
+                "☼☼☼☼☼",
+                5);
 
         hero.act();
         hero.down();
@@ -307,7 +315,8 @@ public class GameFieldImplTest {
                 "☼   ☼" +
                 "☼ ☺$☼" +
                 "☼   ☼" +
-                "☼☼☼☼☼");
+                "☼☼☼☼☼",
+                5);
 
         dice(1, 3);
         hero.right();
@@ -328,7 +337,8 @@ public class GameFieldImplTest {
                 "☼   ☼" +
                 "☼ ☺ ☼" +
                 "☼   ☼" +
-                "☼☼☼☼☼");
+                "☼☼☼☼☼",
+                5);
 
         hero.down();
         hero.act();
@@ -349,7 +359,8 @@ public class GameFieldImplTest {
                 "☼   ☼" +
                 "☼ ☺$☼" +
                 "☼   ☼" +
-                "☼☼☼☼☼");
+                "☼☼☼☼☼",
+                5);
 
         dice(2, 2);
         hero.right();
@@ -370,7 +381,8 @@ public class GameFieldImplTest {
                 "☼   ☼" +
                 "☼ ☺ ☼" +
                 "☼   ☼" +
-                "☼☼☼☼☼");
+                "☼☼☼☼☼",
+                5);
 
         hero.act();
         game.tick();
