@@ -25,6 +25,7 @@ package com.codenjoy.dojo.excitebike.client.ai;
 
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.excitebike.client.Board;
+import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardType;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
@@ -32,6 +33,20 @@ import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 
 import java.util.Arrays;
 import java.util.List;
+
+import static com.codenjoy.dojo.excitebike.model.items.Elements.BORDER;
+import static com.codenjoy.dojo.excitebike.model.items.Elements.LINE_CHANGER_DOWN;
+import static com.codenjoy.dojo.excitebike.model.items.Elements.LINE_CHANGER_UP;
+import static com.codenjoy.dojo.excitebike.model.items.Elements.OBSTACLE;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.OTHER_BIKE;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.OTHER_BIKE_FALLEN;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.OTHER_BIKE_INCLINE_LEFT;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.OTHER_BIKE_INCLINE_RIGHT;
+import static com.codenjoy.dojo.services.Direction.DOWN;
+import static com.codenjoy.dojo.services.Direction.LEFT;
+import static com.codenjoy.dojo.services.Direction.RIGHT;
+import static com.codenjoy.dojo.services.Direction.STOP;
+import static com.codenjoy.dojo.services.Direction.UP;
 
 /**
  * Это алгоритм твоего бота. Он будет запускаться в игру с первым
@@ -42,82 +57,67 @@ import java.util.List;
  */
 public class AISolver implements Solver<Board> {
 
-    private DeikstraFindWay way;
     private Dice dice;
 
     public AISolver(Dice dice) {
         this.dice = dice;
-        this.way = new DeikstraFindWay();
-    }
-
-    public DeikstraFindWay.Possible possible(final Board board) {
-        return new DeikstraFindWay.Possible() {
-            @Override
-            public boolean possible(Point from, Direction where) {
-                int x = from.getX();
-                int y = from.getY();
-                if (board.isBarrierAt(x, y)) return false;
-                if (board.isBombAt(x, y)) return false;
-
-                Point newPt = where.change(from);
-                int nx = newPt.getX();
-                int ny = newPt.getY();
-
-                if (board.isOutOfField(nx, ny)) return false;
-
-                if (board.isBarrierAt(nx, ny)) return false;
-                if (board.isBombAt(nx, ny)) return false;
-
-                return true;
-            }
-
-            @Override
-            public boolean possible(Point atWay) {
-                return true;
-            }
-        };
     }
 
     @Override
     public String get(final Board board) {
         if (board.isGameOver()) return "";
-        List<Direction> result = getDirections(board);
-        if (result.isEmpty()) return "";
-        return result.get(0).toString() + getBombIfNeeded(board);
+        Direction result = getCommand(board);
+        return result.toString();
     }
 
-    private String getBombIfNeeded(Board board) {
-        Point me = board.getMe();
-        if (me.getX() % 2 == 0 && me.getY() % 2 == 0) {
-            return ", ACT";
-        } else {
-            return "";
+    private Direction getCommand(Board board) {
+        Direction command = STOP;
+
+        if (board.checkNearMe(RIGHT, OBSTACLE, OTHER_BIKE, OTHER_BIKE_INCLINE_LEFT, OTHER_BIKE_INCLINE_RIGHT, OTHER_BIKE_FALLEN)) {
+            command = evade(board);
+        } else if (board.checkNearMe(UP, OTHER_BIKE, OTHER_BIKE_INCLINE_LEFT, OTHER_BIKE_INCLINE_RIGHT)) {
+            command = UP;
+        } else if (board.checkNearMe(DOWN, OTHER_BIKE, OTHER_BIKE_INCLINE_LEFT, OTHER_BIKE_INCLINE_RIGHT)) {
+            command = DOWN;
+        } else if (board.checkNearMe(RIGHT, SpringboardType.LEFT_DOWN)) {
+            command = LEFT;
+        } else if (board.checkNearMe(RIGHT, SpringboardType.RIGHT_DOWN)) {
+            command = RIGHT;
         }
+        return command;
     }
 
-    public List<Direction> getDirections(Board board) {
-        int size = board.size();
-        if (bombsNear(board)) {
-            return Arrays.asList(Direction.random(dice));
+    private Direction evade(Board board) {
+        Direction command = null;
+        if (board.checkNearMe(UP, BORDER)) {
+            if (noLineChangerCurrently(board)) {
+                command = DOWN;
+            }
+        } else if (board.checkNearMe(DOWN, BORDER)) {
+            if (noLineChangerCurrently(board)) {
+                command = UP;
+            }
+        } else if (board.checkNearMe(UP, OTHER_BIKE, OTHER_BIKE_INCLINE_LEFT, OTHER_BIKE_INCLINE_RIGHT)) {
+            if (noLineChangerCurrently(board)) {
+                command = DOWN;
+            }
+        } else if (board.checkNearMe(DOWN, OTHER_BIKE, OTHER_BIKE_INCLINE_LEFT, OTHER_BIKE_INCLINE_RIGHT)) {
+            if (noLineChangerCurrently(board)) {
+                command = UP;
+            }
+        } else if (noLineChangerCurrently(board)) {
+            command = randomBoolean() ? UP : DOWN;
         }
-
-        Point from = board.getMe();
-        List<Point> to = null;//board.get(GameElementType.GOLD);
-        DeikstraFindWay.Possible map = possible(board);
-        return way.getShortestWay(size, from, to, map);
+        return command;
     }
 
-    // TODO fix Deikstra find way
-    private boolean bombsNear(Board board) {
-        Point me = board.getMe();
-        Point atLeft = Direction.LEFT.change(me);
-        Point atRight = Direction.RIGHT.change(me);
-        Point atUp = Direction.UP.change(me);
-        Point atDown = Direction.DOWN.change(me);
-
-        return false;/*board.isAt(atLeft.getX(), atLeft.getY(), GameElementType.BOMB, GameElementType.WALL, GameElementType.OTHER_HERO) &&
-                board.isAt(atRight.getX(), atRight.getY(), GameElementType.BOMB, GameElementType.WALL, GameElementType.OTHER_HERO) &&
-                board.isAt(atUp.getX(), atUp.getY(), GameElementType.BOMB, GameElementType.WALL, GameElementType.OTHER_HERO) &&
-                board.isAt(atDown.getX(), atDown.getY(), GameElementType.BOMB, GameElementType.WALL, GameElementType.OTHER_HERO);*/
+    private boolean noLineChangerCurrently(Board board) {
+        //TODO refactor after adding elements like 'BikeAtLineChanger'
+        return !board.checkAtMe(LINE_CHANGER_DOWN) && !board.checkAtMe(LINE_CHANGER_UP);
     }
+
+    private boolean randomBoolean() {
+        return dice.next(1) == 1;
+    }
+
 }

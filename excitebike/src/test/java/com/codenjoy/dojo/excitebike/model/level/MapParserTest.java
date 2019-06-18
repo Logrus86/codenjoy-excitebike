@@ -27,13 +27,16 @@ import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardElementTy
 import com.codenjoy.dojo.excitebike.services.parse.MapParserImpl;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.printer.CharElements;
-import com.google.common.collect.Lists;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -51,26 +54,18 @@ public class MapParserTest {
         this.element = element;
     }
 
-    @Parameterized.Parameters(name = "''{0}''")
+    @Parameterized.Parameters(name = "{0}")
     public static Collection data() {
-        return Lists.newArrayList(
-                GameElementType.BORDER,
-                GameElementType.ACCELERATOR,
-                GameElementType.INHIBITOR,
-                GameElementType.OBSTACLE,
-                GameElementType.LINE_CHANGER_UP,
-                GameElementType.LINE_CHANGER_DOWN,
-                SpringboardElementType.SPRINGBOARD_DARK,
-                SpringboardElementType.SPRINGBOARD_LIGHT,
-                SpringboardElementType.SPRINGBOARD_LEFT_DOWN,
-                SpringboardElementType.SPRINGBOARD_LEFT_UP,
-                SpringboardElementType.SPRINGBOARD_RIGHT_DOWN,
-                SpringboardElementType.SPRINGBOARD_RIGHT_UP
-        );
+        return Stream.of(Arrays.stream(Elements.values()), Arrays.stream(SpringboardType.values())
+                /*, TODO: uncomment after Bike class implementation and MapParser adjusting
+                     Arrays.stream(BikeType.values())*/)
+                .flatMap(Function.identity())
+                .filter(e -> e != GameElementType.NONE)
+                .collect(Collectors.toList());
     }
 
     @Test
-    public void getPointImplMethods__shouldReturnAllAcceleratorsWithCorrectCoordinates__ifGivenMapIsSquareWithDifferentObjects() {
+    public void getPointImplMethods__shouldReturnAllElementsOfCertainTypeWithCorrectCoordinates__ifGivenMapIsSquareWithDifferentObjects() {
         //given
         String map = "     " +
                 "   " + element.ch() + " " +
@@ -100,7 +95,7 @@ public class MapParserTest {
     }
 
     @Test
-    public void getPointImplMethods__shouldReturnAllAcceleratorsWithCorrectCoordinates__ifGivenMapIsSquareWithAcceleratorsOnly() {
+    public void getPointImplMethods__shouldReturnAllElementsOfCertainTypeWithCorrectCoordinates__ifGivenMapIsSquareWithElementsOfCertainTypeOnly() {
         //given
         String map = "" + element.ch() + element.ch() + element.ch() +
                 element.ch() + element.ch() + element.ch() +
@@ -143,7 +138,7 @@ public class MapParserTest {
     }
 
     @Test
-    public void getPointImplMethods__shouldReturnAllAcceleratorsWithCorrectCoordinates__ifGivenMapIsRectangleWithDifferentObjects() {
+    public void getPointImplMethods__shouldReturnAllElementsOfCertainTypeWithCorrectCoordinates__ifGivenMapIsRectangleWithDifferentObjects() {
         //given
         String map = "     " +
                 "   " + element.ch() + " " +
@@ -168,7 +163,7 @@ public class MapParserTest {
     }
 
     @Test
-    public void getPointImplMethods__shouldReturnAllAcceleratorsWithCorrectCoordinates__ifGivenMapIsRectangleWithAcceleratorsOnly() {
+    public void getPointImplMethods__shouldReturnAllElementsOfCertainTypeWithCorrectCoordinates__ifGivenMapIsRectangleWithElementsOfCertainTypeOnly() {
         //given
         String map = "" + element.ch() + element.ch() + element.ch() +
                 element.ch() + element.ch() + element.ch();
