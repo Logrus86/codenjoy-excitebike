@@ -35,7 +35,7 @@
     <repositories>
         <repository>
             <id>codenjoy-releases</id>
-            <url>https://github.com/codenjoyme/codenjoy-repo/raw/master/snapshots</url>
+            <url>https://raw.githubusercontent.com/codenjoyme/codenjoy-repo/master/snapshots</url>
         </repository>
     </repositories>
 

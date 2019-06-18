@@ -19,7 +19,7 @@
     <repositories>
         <repository>
             <id>codenjoy-releases</id>
-            <url>https://github.com/codenjoyme/codenjoy-repo/tree/master/snapshots</url>
+            <url>https://raw.githubusercontent.com/codenjoyme/codenjoy-repo/master/snapshots</url>
         </repository>
     </repositories>
 
@@ -33,7 +33,7 @@
             <artifactId>commons-collections4</artifactId>
         </dependency>
         <dependency>
-           <groupId>org.apache.commons</groupId>
+            <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>
         <dependency>
@@ -44,6 +44,7 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
+            <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -59,22 +60,27 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler.version}</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
+                <version>${maven-source-plugin.version}</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
+                <version>${maven-resources.version}</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
+                <version>${maven-antrun.version}</version>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>license-maven-plugin</artifactId>
+                <version>${maven-license.version}</version>
             </plugin>
         </plugins>
     </build>

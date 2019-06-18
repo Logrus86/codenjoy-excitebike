@@ -24,8 +24,6 @@
 // встроится она в layout указанный в ресурсах
 // если заремарить это все, тогда UI будет базовый
 
-var doNothing = true;
-
 /*
 game.enableDonate = false;
 game.enableJoystick = true;
@@ -39,11 +37,11 @@ game.showBody = false;
 game.onBoardPageLoad = function() {
     initLayout(game.gameName, 'board.html', game.contextPath,
         function() {
-            $("#glasses").before($("#main_board"));
-            $("#main_board").remove();
+            $("#main_board").empty();
+            $("#glasses").prependTo($("#main_board"));
 
-            $("#leaderboard").before($("#main_leaderboard"));
-            $("#main_leaderboard").remove();
+            $("#main_leaderboard").empty();
+            $("#leaderboard").prependTo($("#main_leaderboard"));
         },
         ['js/lib1/script1.js',
             'js/lib2/script1.js',
