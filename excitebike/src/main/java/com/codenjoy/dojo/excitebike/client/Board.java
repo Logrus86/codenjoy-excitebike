@@ -25,33 +25,56 @@ package com.codenjoy.dojo.excitebike.client;
 
 import com.codenjoy.dojo.client.AbstractBoard;
 import com.codenjoy.dojo.excitebike.model.items.Elements;
+import com.codenjoy.dojo.excitebike.model.items.bike.BikeType;
+import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardType;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.printer.CharElements;
+
+import java.util.Arrays;
+import java.util.function.Function;
+import java.util.stream.Stream;
+
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_FALLEN;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_INCLINE_LEFT;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_INCLINE_RIGHT;
 
 /**
  * Класс, обрабатывающий строковое представление доски.
  * Содержит ряд унаследованных методов {@see AbstractBoard},
  * но ты можешь добавить сюда любые свои методы на их основе.
  */
-public class Board extends AbstractBoard<Elements> {
+public class Board extends AbstractBoard<CharElements> {
 
     @Override
-    public Elements valueOf(char ch) {
-        return Elements.valueOf(ch);
-    }
-
-    public boolean isBarrierAt(int x, int y) {
-        return false;//isAt(x, y, Elements.WALL, Elements.OTHER_HERO);
+    public CharElements valueOf(char ch) {
+        return Stream.of(
+                Arrays.stream(Elements.values()),
+                Arrays.stream(SpringboardType.values()),
+                Arrays.stream(BikeType.values())
+        ).flatMap(Function.identity())
+                .filter(e -> e.ch() == ch)
+                .findAny()
+                .orElseThrow(() -> new IllegalArgumentException("No such element for " + ch));
     }
 
     public Point getMe() {
-        return null;//get(Elements.DEAD_HERO, Elements.HERO).get(0);
+        return get(BIKE, BIKE_FALLEN, BIKE_INCLINE_LEFT, BIKE_INCLINE_RIGHT).get(0);
     }
 
     public boolean isGameOver() {
-        return false;//!get(Elements.DEAD_HERO).isEmpty();
+        return isAt(getMe(), BIKE_FALLEN);
     }
 
-    public boolean isBombAt(int x, int y) {
-        return false;//isAt(x, y, Elements.BOMB);
+    public boolean checkNearMe(Direction direction, CharElements... elements) {
+        Point me = getMe();
+        Point atDirection = direction.change(me);
+        return isAt(atDirection.getX(), atDirection.getY(), elements);
+    }
+
+    public boolean checkAtMe(CharElements element) {
+        Point me = getMe();
+        return isAt(me, element);
     }
 }

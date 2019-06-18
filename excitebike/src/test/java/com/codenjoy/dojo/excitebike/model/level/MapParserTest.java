@@ -27,13 +27,16 @@ import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardType;
 import com.codenjoy.dojo.excitebike.services.parse.MapParserImpl;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.printer.CharElements;
-import com.google.common.collect.Lists;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -53,21 +56,12 @@ public class MapParserTest {
 
     @Parameterized.Parameters(name = "{0}")
     public static Collection data() {
-        return Lists.newArrayList(
-                Elements.BORDER,
-                Elements.ACCELERATOR,
-                Elements.INHIBITOR,
-                Elements.OBSTACLE,
-                Elements.LINE_CHANGER_UP,
-                Elements.LINE_CHANGER_DOWN,
-                Elements.ROAD,
-                SpringboardType.DARK,
-                SpringboardType.LIGHT,
-                SpringboardType.LEFT_DOWN,
-                SpringboardType.LEFT_UP,
-                SpringboardType.RIGHT_DOWN,
-                SpringboardType.RIGHT_UP
-        );
+        return Stream.of(Arrays.stream(Elements.values()), Arrays.stream(SpringboardType.values())
+                /*, TODO: uncomment after Bike class implementation and MapParser adjusting
+                     Arrays.stream(BikeType.values())*/)
+                .flatMap(Function.identity())
+                .filter(e -> e != Elements.NONE)
+                .collect(Collectors.toList());
     }
 
     @Test
