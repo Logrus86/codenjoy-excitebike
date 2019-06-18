@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 if [ "x$CODENJOY_VERSION" = "x" ]; then
-    CODENJOY_VERSION=1.0.28
+    CODENJOY_VERSION=1.1.0
 fi
 
 mvn install:install-file -Dfile=engine-$CODENJOY_VERSION.jar -Dsources=engine-$CODENJOY_VERSION-sources.jar -DpomFile=engine-$CODENJOY_VERSION-pom.xml -DgroupId=com.codenjoy -DartifactId=engine -Dversion=$CODENJOY_VERSION -Dpackaging=jar
