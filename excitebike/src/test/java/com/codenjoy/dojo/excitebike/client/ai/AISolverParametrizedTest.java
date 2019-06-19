@@ -175,11 +175,12 @@ public class AISolverParametrizedTest {
                 new Object[]{Elements.NONE, BikeType.OTHER_BIKE_INCLINE_RIGHT, Elements.NONE, Direction.UP},
                 new Object[]{Elements.NONE, Elements.NONE, BikeType.OTHER_BIKE, Direction.DOWN},
                 new Object[]{Elements.NONE, Elements.NONE, BikeType.OTHER_BIKE_INCLINE_LEFT, Direction.DOWN},
-                new Object[]{Elements.NONE, Elements.NONE, BikeType.OTHER_BIKE_INCLINE_RIGHT, Direction.DOWN},
+                new Object[]{Elements.NONE, Elements.NONE, BikeType.OTHER_BIKE_INCLINE_RIGHT, Direction.DOWN}
 
                 // incline the bike according to the springboard
-                new Object[]{SpringboardType.LEFT_DOWN, Elements.NONE, Elements.NONE, Direction.LEFT},
-                new Object[]{SpringboardType.RIGHT_DOWN, Elements.NONE, Elements.NONE, Direction.RIGHT}
+                //TODO implement after Springboard task (#26)
+                //new Object[]{SpringboardType.LEFT_DOWN, Elements.NONE, Elements.NONE, Direction.LEFT},
+                //new Object[]{SpringboardType.RIGHT_DOWN, Elements.NONE, Elements.NONE, Direction.RIGHT}
         );
     }
 
