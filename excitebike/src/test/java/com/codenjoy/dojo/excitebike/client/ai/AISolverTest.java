@@ -22,16 +22,16 @@ package com.codenjoy.dojo.excitebike.client.ai;
  * #L%
  */
 
-import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.excitebike.client.Board;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Random;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -47,14 +47,70 @@ public class AISolverTest {
     }
 
     @Test
+    public void get__shouldReturnRandomDownOrUp__ifNextElementIsObstacleAndThereIsNothingBelowOrAbove() {
+        //given
+        Board board = toBoard(
+                        "■■■■■" +
+                        "     " +
+                        "  o█ " +
+                        "     " +
+                        "■■■■■"
+        );
+        boolean randomBool = new Random().nextBoolean();
+        when(dice.next(1)).thenReturn(randomBool ? 1 : 0);
+
+        //when
+        String result = solver.get(board);
+
+        //then
+        assertThat(result, is(randomBool ? Direction.UP.toString() : Direction.DOWN.toString()));
+    }
+
+    @Test
+    public void get__shouldReturnDOWN__ifNextElementIsObstacleAndThereIsEnemyBikeAboveAndNothingBelow() {
+        //given
+        Board board = toBoard(
+                        "■■■■■" +
+                        "     " +
+                        "  o█ " +
+                        "  e  " +
+                        "■■■■■"
+        );
+
+        //when
+        String result = solver.get(board);
+
+        //then
+        assertThat(result, is(Direction.DOWN.toString()));
+    }
+
+    @Test
     public void get__shouldReturnUP__ifNextElementIsObstacleAndThereIsEnemyBikeBelowAndNothingAbove() {
         //given
         Board board = toBoard(
-                "■■■■■" +
-                "     " +
-                "  o█ " +
-                "  e  " +
-                "■■■■■"
+                        "■■■■■" +
+                        "  e  " +
+                        "  o█ " +
+                        "     " +
+                        "■■■■■"
+        );
+
+        //when
+        String result = solver.get(board);
+
+        //then
+        assertThat(result, is(Direction.UP.toString()));
+    }
+
+    @Test
+    public void get__shouldReturnUP__ifNextElementIsObstacleAndThereIsEnemyBikeAboveButBorderBelow() {
+        //given
+        Board board = toBoard(
+                        "■■■■■" +
+                        "   o█ " +
+                        "   e  " +
+                        "     " +
+                        "■■■■■"
         );
 
         //when
@@ -68,11 +124,11 @@ public class AISolverTest {
     public void get__shouldReturnDOWN__ifNextElementIsObstacleAndThereIsEnemyBikeBelowButBorderAbove() {
         //given
         Board board = toBoard(
-                "■■■■■" +
-                "   o█ " +
-                "   e  " +
-                "     " +
-                "■■■■■"
+                        "■■■■■" +
+                        "     " +
+                        "  e  " +
+                        "  o█ " +
+                        "■■■■■"
         );
 
         //when
@@ -86,7 +142,4 @@ public class AISolverTest {
         return (Board) new Board().forString(board);
     }
 
-    private void dice(Direction direction) {
-        when(dice.next(anyInt())).thenReturn(direction.value());
-    }
 }
