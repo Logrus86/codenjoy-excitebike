@@ -191,7 +191,7 @@ public class BoardTest {
         );
 
         //when
-        boolean result = board.checkNearMe(Direction.DOWN, BikeType.OTHER_BIKE);
+        boolean result = board.checkNearMe(Direction.UP, BikeType.OTHER_BIKE);
 
         //then
         assertThat(result, is(false));
@@ -227,7 +227,7 @@ public class BoardTest {
         );
 
         //when
-        boolean result = board.checkNearMe(Direction.UP, Elements.BORDER);
+        boolean result = board.checkNearMe(Direction.DOWN, Elements.BORDER);
 
         //then
         assertThat(result, is(false));
