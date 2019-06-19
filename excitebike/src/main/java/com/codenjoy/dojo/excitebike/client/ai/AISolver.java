@@ -10,12 +10,12 @@ package com.codenjoy.dojo.excitebike.client.ai;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -28,11 +28,6 @@ import com.codenjoy.dojo.excitebike.client.Board;
 import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardType;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.algs.DeikstraFindWay;
-
-import java.util.Arrays;
-import java.util.List;
 
 import static com.codenjoy.dojo.excitebike.model.items.Elements.BORDER;
 import static com.codenjoy.dojo.excitebike.model.items.Elements.LINE_CHANGER_DOWN;
@@ -88,31 +83,33 @@ public class AISolver implements Solver<Board> {
     }
 
     private Direction evade(Board board) {
-        Direction command = null;
-        if (board.checkNearMe(UP, BORDER)) {
+        Direction command = STOP;
+        if (board.checkNearMe(UP, BORDER, OTHER_BIKE_FALLEN) && !board.checkNearMe(DOWN, BORDER, OTHER_BIKE_FALLEN)) {
             if (noLineChangerCurrently(board)) {
                 command = DOWN;
             }
-        } else if (board.checkNearMe(DOWN, BORDER)) {
+        } else if (board.checkNearMe(DOWN, BORDER, OTHER_BIKE_FALLEN) && !board.checkNearMe(UP, BORDER, OTHER_BIKE_FALLEN)) {
             if (noLineChangerCurrently(board)) {
                 command = UP;
             }
-        } else if (board.checkNearMe(UP, OTHER_BIKE, OTHER_BIKE_INCLINE_LEFT, OTHER_BIKE_INCLINE_RIGHT)) {
+        } else if (board.checkNearMe(UP, OTHER_BIKE, OTHER_BIKE_INCLINE_LEFT, OTHER_BIKE_INCLINE_RIGHT) && !board.checkNearMe(DOWN, BORDER, OTHER_BIKE_FALLEN)) {
             if (noLineChangerCurrently(board)) {
                 command = DOWN;
             }
-        } else if (board.checkNearMe(DOWN, OTHER_BIKE, OTHER_BIKE_INCLINE_LEFT, OTHER_BIKE_INCLINE_RIGHT)) {
+        } else if (board.checkNearMe(DOWN, OTHER_BIKE, OTHER_BIKE_INCLINE_LEFT, OTHER_BIKE_INCLINE_RIGHT) && !board.checkNearMe(UP, BORDER, OTHER_BIKE_FALLEN)) {
             if (noLineChangerCurrently(board)) {
                 command = UP;
             }
-        } else if (noLineChangerCurrently(board)) {
-            command = randomBoolean() ? UP : DOWN;
+        } else if (!board.checkNearMe(UP, BORDER, OTHER_BIKE_FALLEN) && !board.checkNearMe(DOWN, BORDER, OTHER_BIKE_FALLEN)) {
+            if (noLineChangerCurrently(board)) {
+                command = randomBoolean() ? UP : DOWN;
+            }
         }
         return command;
     }
 
     private boolean noLineChangerCurrently(Board board) {
-        //TODO refactor after adding elements like 'BikeAtLineChanger'
+        //TODO refactor after adding cross-elements (task #29)
         return !board.checkAtMe(LINE_CHANGER_DOWN) && !board.checkAtMe(LINE_CHANGER_UP);
     }
 
