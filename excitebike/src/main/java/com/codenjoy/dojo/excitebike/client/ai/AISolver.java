@@ -70,14 +70,15 @@ public class AISolver implements Solver<Board> {
 
         if (board.checkNearMe(RIGHT, OBSTACLE, OTHER_BIKE, OTHER_BIKE_INCLINE_LEFT, OTHER_BIKE_INCLINE_RIGHT, OTHER_BIKE_FALLEN)) {
             command = evade(board);
+        } else if (board.checkNearMe(UP, OTHER_BIKE, OTHER_BIKE_INCLINE_LEFT, OTHER_BIKE_INCLINE_RIGHT) && board.checkNearMe(DOWN, OTHER_BIKE, OTHER_BIKE_INCLINE_LEFT, OTHER_BIKE_INCLINE_RIGHT)) {
+            command = randomBoolean() ? UP : DOWN;
         } else if (board.checkNearMe(UP, OTHER_BIKE, OTHER_BIKE_INCLINE_LEFT, OTHER_BIKE_INCLINE_RIGHT)) {
             command = UP;
         } else if (board.checkNearMe(DOWN, OTHER_BIKE, OTHER_BIKE_INCLINE_LEFT, OTHER_BIKE_INCLINE_RIGHT)) {
             command = DOWN;
+            //TODO implement after Springboard task (#26)
         } else if (board.checkNearMe(RIGHT, SpringboardType.LEFT_DOWN)) {
             command = LEFT;
-        } else if (board.checkNearMe(RIGHT, SpringboardType.RIGHT_DOWN)) {
-            command = RIGHT;
         }
         return command;
     }
