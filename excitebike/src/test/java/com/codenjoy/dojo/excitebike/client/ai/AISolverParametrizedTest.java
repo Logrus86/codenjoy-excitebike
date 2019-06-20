@@ -23,9 +23,6 @@ package com.codenjoy.dojo.excitebike.client.ai;
  */
 
 import com.codenjoy.dojo.excitebike.client.Board;
-import com.codenjoy.dojo.excitebike.model.items.Elements;
-import com.codenjoy.dojo.excitebike.model.items.bike.BikeType;
-import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardType;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.printer.CharElements;
@@ -37,6 +34,16 @@ import org.junit.runners.Parameterized;
 import java.util.List;
 import java.util.Random;
 
+import static com.codenjoy.dojo.excitebike.model.items.GameElementType.BORDER;
+import static com.codenjoy.dojo.excitebike.model.items.GameElementType.NONE;
+import static com.codenjoy.dojo.excitebike.model.items.GameElementType.OBSTACLE;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.OTHER_BIKE;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.OTHER_BIKE_FALLEN;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.OTHER_BIKE_INCLINE_LEFT;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.OTHER_BIKE_INCLINE_RIGHT;
+import static com.codenjoy.dojo.services.Direction.DOWN;
+import static com.codenjoy.dojo.services.Direction.STOP;
+import static com.codenjoy.dojo.services.Direction.UP;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;
@@ -65,130 +72,129 @@ public class AISolverParametrizedTest {
     public static List<Object[]> data() {
         return Lists.newArrayList(
                 // avoid obstacle - random choice
-                new Object[]{Elements.OBSTACLE, Elements.NONE, Elements.NONE, null},
+                new Object[]{OBSTACLE, NONE, NONE, null},
 
                 // avoid obstacle - choose not border
-                new Object[]{Elements.OBSTACLE, Elements.NONE, Elements.BORDER, Direction.UP},
-                new Object[]{Elements.OBSTACLE, BikeType.OTHER_BIKE, Elements.BORDER, Direction.UP},
-                new Object[]{Elements.OBSTACLE, BikeType.OTHER_BIKE_INCLINE_LEFT, Elements.BORDER, Direction.UP},
-                new Object[]{Elements.OBSTACLE, BikeType.OTHER_BIKE_INCLINE_RIGHT, Elements.BORDER, Direction.UP},
+                new Object[]{OBSTACLE, NONE, BORDER, UP},
+                new Object[]{OBSTACLE, OTHER_BIKE, BORDER, UP},
+                new Object[]{OBSTACLE, OTHER_BIKE_INCLINE_LEFT, BORDER, UP},
+                new Object[]{OBSTACLE, OTHER_BIKE_INCLINE_RIGHT, BORDER, UP},
 
                 // no way to survive
-                new Object[]{Elements.OBSTACLE, BikeType.OTHER_BIKE_FALLEN, Elements.BORDER, Direction.STOP},
+                new Object[]{OBSTACLE, OTHER_BIKE_FALLEN, BORDER, STOP},
 
                 // avoid obstacle - choose not border
-                new Object[]{Elements.OBSTACLE, Elements.BORDER, Elements.NONE, Direction.DOWN},
-                new Object[]{Elements.OBSTACLE, Elements.BORDER, BikeType.OTHER_BIKE, Direction.DOWN},
-                new Object[]{Elements.OBSTACLE, Elements.BORDER, BikeType.OTHER_BIKE_INCLINE_LEFT, Direction.DOWN},
-                new Object[]{Elements.OBSTACLE, Elements.BORDER, BikeType.OTHER_BIKE_INCLINE_RIGHT, Direction.DOWN},
+                new Object[]{OBSTACLE, BORDER, NONE, DOWN},
+                new Object[]{OBSTACLE, BORDER, OTHER_BIKE, DOWN},
+                new Object[]{OBSTACLE, BORDER, OTHER_BIKE_INCLINE_LEFT, DOWN},
+                new Object[]{OBSTACLE, BORDER, OTHER_BIKE_INCLINE_RIGHT, DOWN},
 
                 // no way to survive
-                new Object[]{Elements.OBSTACLE, Elements.BORDER, BikeType.OTHER_BIKE_FALLEN, Direction.STOP},
+                new Object[]{OBSTACLE, BORDER, OTHER_BIKE_FALLEN, STOP},
 
                 // avoid other bike - random choice
-                new Object[]{BikeType.OTHER_BIKE, Elements.NONE, Elements.NONE, null},
+                new Object[]{OTHER_BIKE, NONE, NONE, null},
 
                 // avoid other bike - choose not border
-                new Object[]{BikeType.OTHER_BIKE, Elements.NONE, Elements.BORDER, Direction.UP},
-                new Object[]{BikeType.OTHER_BIKE, BikeType.OTHER_BIKE, Elements.BORDER, Direction.UP},
-                new Object[]{BikeType.OTHER_BIKE, BikeType.OTHER_BIKE_INCLINE_LEFT, Elements.BORDER, Direction.UP},
-                new Object[]{BikeType.OTHER_BIKE, BikeType.OTHER_BIKE_INCLINE_RIGHT, Elements.BORDER, Direction.UP},
+                new Object[]{OTHER_BIKE, NONE, BORDER, UP},
+                new Object[]{OTHER_BIKE, OTHER_BIKE, BORDER, UP},
+                new Object[]{OTHER_BIKE, OTHER_BIKE_INCLINE_LEFT, BORDER, UP},
+                new Object[]{OTHER_BIKE, OTHER_BIKE_INCLINE_RIGHT, BORDER, UP},
 
                 // no way to avoid other bike / change the line
-                new Object[]{BikeType.OTHER_BIKE, BikeType.OTHER_BIKE_FALLEN, Elements.BORDER, Direction.STOP},
+                new Object[]{OTHER_BIKE, OTHER_BIKE_FALLEN, BORDER, STOP},
 
                 // avoid other bike - choose not border
-                new Object[]{BikeType.OTHER_BIKE, Elements.BORDER, Elements.NONE, Direction.DOWN},
-                new Object[]{BikeType.OTHER_BIKE, Elements.BORDER, BikeType.OTHER_BIKE, Direction.DOWN},
-                new Object[]{BikeType.OTHER_BIKE, Elements.BORDER, BikeType.OTHER_BIKE_INCLINE_LEFT, Direction.DOWN},
-                new Object[]{BikeType.OTHER_BIKE, Elements.BORDER, BikeType.OTHER_BIKE_INCLINE_RIGHT, Direction.DOWN},
+                new Object[]{OTHER_BIKE, BORDER, NONE, DOWN},
+                new Object[]{OTHER_BIKE, BORDER, OTHER_BIKE, DOWN},
+                new Object[]{OTHER_BIKE, BORDER, OTHER_BIKE_INCLINE_LEFT, DOWN},
+                new Object[]{OTHER_BIKE, BORDER, OTHER_BIKE_INCLINE_RIGHT, DOWN},
 
                 // no way to avoid other bike / change the line
-                new Object[]{BikeType.OTHER_BIKE, Elements.BORDER, BikeType.OTHER_BIKE_FALLEN, Direction.STOP},
+                new Object[]{OTHER_BIKE, BORDER, OTHER_BIKE_FALLEN, STOP},
 
                 // avoid other bike - random choice
-                new Object[]{BikeType.OTHER_BIKE_INCLINE_LEFT, Elements.NONE, Elements.NONE, null},
+                new Object[]{OTHER_BIKE_INCLINE_LEFT, NONE, NONE, null},
 
                 // avoid other bike - choose not border
-                new Object[]{BikeType.OTHER_BIKE_INCLINE_LEFT, Elements.NONE, Elements.BORDER, Direction.UP},
-                new Object[]{BikeType.OTHER_BIKE_INCLINE_LEFT, BikeType.OTHER_BIKE, Elements.BORDER, Direction.UP},
-                new Object[]{BikeType.OTHER_BIKE_INCLINE_LEFT, BikeType.OTHER_BIKE_INCLINE_LEFT, Elements.BORDER, Direction.UP},
-                new Object[]{BikeType.OTHER_BIKE_INCLINE_LEFT, BikeType.OTHER_BIKE_INCLINE_RIGHT, Elements.BORDER, Direction.UP},
+                new Object[]{OTHER_BIKE_INCLINE_LEFT, NONE, BORDER, UP},
+                new Object[]{OTHER_BIKE_INCLINE_LEFT, OTHER_BIKE, BORDER, UP},
+                new Object[]{OTHER_BIKE_INCLINE_LEFT, OTHER_BIKE_INCLINE_LEFT, BORDER, UP},
+                new Object[]{OTHER_BIKE_INCLINE_LEFT, OTHER_BIKE_INCLINE_RIGHT, BORDER, UP},
 
                 // no way to avoid other bike / change the line
-                new Object[]{BikeType.OTHER_BIKE_INCLINE_LEFT, BikeType.OTHER_BIKE_FALLEN, Elements.BORDER, Direction.STOP},
+                new Object[]{OTHER_BIKE_INCLINE_LEFT, OTHER_BIKE_FALLEN, BORDER, STOP},
 
                 // avoid other bike - choose not border
-                new Object[]{BikeType.OTHER_BIKE_INCLINE_LEFT, Elements.BORDER, Elements.NONE, Direction.DOWN},
-                new Object[]{BikeType.OTHER_BIKE_INCLINE_LEFT, Elements.BORDER, BikeType.OTHER_BIKE, Direction.DOWN},
-                new Object[]{BikeType.OTHER_BIKE_INCLINE_LEFT, Elements.BORDER, BikeType.OTHER_BIKE_INCLINE_LEFT, Direction.DOWN},
-                new Object[]{BikeType.OTHER_BIKE_INCLINE_LEFT, Elements.BORDER, BikeType.OTHER_BIKE_INCLINE_RIGHT, Direction.DOWN},
+                new Object[]{OTHER_BIKE_INCLINE_LEFT, BORDER, NONE, DOWN},
+                new Object[]{OTHER_BIKE_INCLINE_LEFT, BORDER, OTHER_BIKE, DOWN},
+                new Object[]{OTHER_BIKE_INCLINE_LEFT, BORDER, OTHER_BIKE_INCLINE_LEFT, DOWN},
+                new Object[]{OTHER_BIKE_INCLINE_LEFT, BORDER, OTHER_BIKE_INCLINE_RIGHT, DOWN},
 
                 // no way to avoid other bike / change the line
-                new Object[]{BikeType.OTHER_BIKE_INCLINE_LEFT, Elements.BORDER, BikeType.OTHER_BIKE_FALLEN, Direction.STOP},
+                new Object[]{OTHER_BIKE_INCLINE_LEFT, BORDER, OTHER_BIKE_FALLEN, STOP},
 
                 // avoid other bike - random choice
-                new Object[]{BikeType.OTHER_BIKE_INCLINE_RIGHT, Elements.NONE, Elements.NONE, null},
+                new Object[]{OTHER_BIKE_INCLINE_RIGHT, NONE, NONE, null},
 
                 // avoid other bike - choose not border
-                new Object[]{BikeType.OTHER_BIKE_INCLINE_RIGHT, Elements.NONE, Elements.BORDER, Direction.UP},
-                new Object[]{BikeType.OTHER_BIKE_INCLINE_RIGHT, BikeType.OTHER_BIKE, Elements.BORDER, Direction.UP},
-                new Object[]{BikeType.OTHER_BIKE_INCLINE_RIGHT, BikeType.OTHER_BIKE_INCLINE_LEFT, Elements.BORDER, Direction.UP},
-                new Object[]{BikeType.OTHER_BIKE_INCLINE_RIGHT, BikeType.OTHER_BIKE_INCLINE_RIGHT, Elements.BORDER, Direction.UP},
+                new Object[]{OTHER_BIKE_INCLINE_RIGHT, NONE, BORDER, UP},
+                new Object[]{OTHER_BIKE_INCLINE_RIGHT, OTHER_BIKE, BORDER, UP},
+                new Object[]{OTHER_BIKE_INCLINE_RIGHT, OTHER_BIKE_INCLINE_LEFT, BORDER, UP},
+                new Object[]{OTHER_BIKE_INCLINE_RIGHT, OTHER_BIKE_INCLINE_RIGHT, BORDER, UP},
 
                 // no way to avoid other bike / change the line
-                new Object[]{BikeType.OTHER_BIKE_INCLINE_RIGHT, BikeType.OTHER_BIKE_FALLEN, Elements.BORDER, Direction.STOP},
+                new Object[]{OTHER_BIKE_INCLINE_RIGHT, OTHER_BIKE_FALLEN, BORDER, STOP},
 
                 // avoid other bike - choose not border
-                new Object[]{BikeType.OTHER_BIKE_INCLINE_RIGHT, Elements.BORDER, Elements.NONE, Direction.DOWN},
-                new Object[]{BikeType.OTHER_BIKE_INCLINE_RIGHT, Elements.BORDER, BikeType.OTHER_BIKE, Direction.DOWN},
-                new Object[]{BikeType.OTHER_BIKE_INCLINE_RIGHT, Elements.BORDER, BikeType.OTHER_BIKE_INCLINE_LEFT, Direction.DOWN},
-                new Object[]{BikeType.OTHER_BIKE_INCLINE_RIGHT, Elements.BORDER, BikeType.OTHER_BIKE_INCLINE_RIGHT, Direction.DOWN},
+                new Object[]{OTHER_BIKE_INCLINE_RIGHT, BORDER, NONE, DOWN},
+                new Object[]{OTHER_BIKE_INCLINE_RIGHT, BORDER, OTHER_BIKE, DOWN},
+                new Object[]{OTHER_BIKE_INCLINE_RIGHT, BORDER, OTHER_BIKE_INCLINE_LEFT, DOWN},
+                new Object[]{OTHER_BIKE_INCLINE_RIGHT, BORDER, OTHER_BIKE_INCLINE_RIGHT, DOWN},
 
                 // no way to avoid other bike / change the line
-                new Object[]{BikeType.OTHER_BIKE_INCLINE_RIGHT, Elements.BORDER, BikeType.OTHER_BIKE_FALLEN, Direction.STOP},
+                new Object[]{OTHER_BIKE_INCLINE_RIGHT, BORDER, OTHER_BIKE_FALLEN, STOP},
 
                 // avoid other bike - random choice
-                new Object[]{BikeType.OTHER_BIKE_FALLEN, Elements.NONE, Elements.NONE, null},
+                new Object[]{OTHER_BIKE_FALLEN, NONE, NONE, null},
 
                 // avoid other bike - choose not border
-                new Object[]{BikeType.OTHER_BIKE_FALLEN, Elements.NONE, Elements.BORDER, Direction.UP},
-                new Object[]{BikeType.OTHER_BIKE_FALLEN, BikeType.OTHER_BIKE, Elements.BORDER, Direction.UP},
-                new Object[]{BikeType.OTHER_BIKE_FALLEN, BikeType.OTHER_BIKE_INCLINE_LEFT, Elements.BORDER, Direction.UP},
-                new Object[]{BikeType.OTHER_BIKE_FALLEN, BikeType.OTHER_BIKE_INCLINE_RIGHT, Elements.BORDER, Direction.UP},
+                new Object[]{OTHER_BIKE_FALLEN, NONE, BORDER, UP},
+                new Object[]{OTHER_BIKE_FALLEN, OTHER_BIKE, BORDER, UP},
+                new Object[]{OTHER_BIKE_FALLEN, OTHER_BIKE_INCLINE_LEFT, BORDER, UP},
+                new Object[]{OTHER_BIKE_FALLEN, OTHER_BIKE_INCLINE_RIGHT, BORDER, UP},
 
                 // no way to avoid other bike / change the line
-                new Object[]{BikeType.OTHER_BIKE_FALLEN, BikeType.OTHER_BIKE_FALLEN, Elements.BORDER, Direction.STOP},
+                new Object[]{OTHER_BIKE_FALLEN, OTHER_BIKE_FALLEN, BORDER, STOP},
 
                 // avoid other bike - choose not border
-                new Object[]{BikeType.OTHER_BIKE_FALLEN, Elements.BORDER, Elements.NONE, Direction.DOWN},
-                new Object[]{BikeType.OTHER_BIKE_FALLEN, Elements.BORDER, BikeType.OTHER_BIKE, Direction.DOWN},
-                new Object[]{BikeType.OTHER_BIKE_FALLEN, Elements.BORDER, BikeType.OTHER_BIKE_INCLINE_LEFT, Direction.DOWN},
-                new Object[]{BikeType.OTHER_BIKE_FALLEN, Elements.BORDER, BikeType.OTHER_BIKE_INCLINE_RIGHT, Direction.DOWN},
+                new Object[]{OTHER_BIKE_FALLEN, BORDER, NONE, DOWN},
+                new Object[]{OTHER_BIKE_FALLEN, BORDER, OTHER_BIKE, DOWN},
+                new Object[]{OTHER_BIKE_FALLEN, BORDER, OTHER_BIKE_INCLINE_LEFT, DOWN},
+                new Object[]{OTHER_BIKE_FALLEN, BORDER, OTHER_BIKE_INCLINE_RIGHT, DOWN},
 
                 // no way to avoid other bike / change the line
-                new Object[]{BikeType.OTHER_BIKE_FALLEN, Elements.BORDER, BikeType.OTHER_BIKE_FALLEN, Direction.STOP},
+                new Object[]{OTHER_BIKE_FALLEN, BORDER, OTHER_BIKE_FALLEN, STOP},
 
                 // hit the bike
-                new Object[]{Elements.NONE, BikeType.OTHER_BIKE, Elements.NONE, Direction.UP},
-                new Object[]{Elements.NONE, BikeType.OTHER_BIKE_INCLINE_LEFT, Elements.NONE, Direction.UP},
-                new Object[]{Elements.NONE, BikeType.OTHER_BIKE_INCLINE_RIGHT, Elements.NONE, Direction.UP},
-                new Object[]{Elements.NONE, Elements.NONE, BikeType.OTHER_BIKE, Direction.DOWN},
-                new Object[]{Elements.NONE, Elements.NONE, BikeType.OTHER_BIKE_INCLINE_LEFT, Direction.DOWN},
-                new Object[]{Elements.NONE, Elements.NONE, BikeType.OTHER_BIKE_INCLINE_RIGHT, Direction.DOWN}
+                new Object[]{NONE, OTHER_BIKE, NONE, UP},
+                new Object[]{NONE, OTHER_BIKE_INCLINE_LEFT, NONE, UP},
+                new Object[]{NONE, OTHER_BIKE_INCLINE_RIGHT, NONE, UP},
+                new Object[]{NONE, NONE, OTHER_BIKE, DOWN},
+                new Object[]{NONE, NONE, OTHER_BIKE_INCLINE_LEFT, DOWN},
+                new Object[]{NONE, NONE, OTHER_BIKE_INCLINE_RIGHT, DOWN}
 
                 // incline the bike according to the springboard
                 //TODO implement after Springboard task (#26)
-                //new Object[]{SpringboardType.LEFT_DOWN, Elements.NONE, Elements.NONE, Direction.LEFT},
-                //new Object[]{SpringboardType.RIGHT_DOWN, Elements.NONE, Elements.NONE, Direction.RIGHT}
+                //new Object[]{SpringboardType.LEFT_DOWN, GameElementType.NONE, GameElementType.NONE, Direction.LEFT},
+                //new Object[]{SpringboardType.RIGHT_DOWN, GameElementType.NONE, GameElementType.NONE, Direction.RIGHT}
         );
     }
 
     @Test
-    public void get__shouldReturnAppropriateDirection__accordingToElementsAround() {
+    public void get__shouldReturnAppropriateDirection__accordingToGameElementTypeAround() {
         //given
-        Board board = toBoard(
-                        "■■■■■" +
+        Board board = toBoard("■■■■■" +
                         "  " + elementBelow + "  " +
                         "  o" + elementAtRight + " " +
                         "  " + elementAbove + "  " +
@@ -197,7 +203,7 @@ public class AISolverParametrizedTest {
         if (expectedDirection == null) {
             boolean randomBool = new Random().nextBoolean();
             when(dice.next(1)).thenReturn(randomBool ? 1 : 0);
-            expectedDirection = randomBool ? Direction.UP : Direction.DOWN;
+            expectedDirection = randomBool ? UP : DOWN;
         }
 
         //when

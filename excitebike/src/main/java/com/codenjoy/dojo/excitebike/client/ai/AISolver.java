@@ -25,18 +25,18 @@ package com.codenjoy.dojo.excitebike.client.ai;
 
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.excitebike.client.Board;
-import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardType;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 
-import static com.codenjoy.dojo.excitebike.model.items.Elements.BORDER;
-import static com.codenjoy.dojo.excitebike.model.items.Elements.LINE_CHANGER_DOWN;
-import static com.codenjoy.dojo.excitebike.model.items.Elements.LINE_CHANGER_UP;
-import static com.codenjoy.dojo.excitebike.model.items.Elements.OBSTACLE;
+import static com.codenjoy.dojo.excitebike.model.items.GameElementType.BORDER;
+import static com.codenjoy.dojo.excitebike.model.items.GameElementType.LINE_CHANGER_DOWN;
+import static com.codenjoy.dojo.excitebike.model.items.GameElementType.LINE_CHANGER_UP;
+import static com.codenjoy.dojo.excitebike.model.items.GameElementType.OBSTACLE;
 import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.OTHER_BIKE;
 import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.OTHER_BIKE_FALLEN;
 import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.OTHER_BIKE_INCLINE_LEFT;
 import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.OTHER_BIKE_INCLINE_RIGHT;
+import static com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardElementType.SPRINGBOARD_LEFT_DOWN;
 import static com.codenjoy.dojo.services.Direction.DOWN;
 import static com.codenjoy.dojo.services.Direction.LEFT;
 import static com.codenjoy.dojo.services.Direction.RIGHT;
@@ -77,7 +77,7 @@ public class AISolver implements Solver<Board> {
         } else if (board.checkNearMe(DOWN, OTHER_BIKE, OTHER_BIKE_INCLINE_LEFT, OTHER_BIKE_INCLINE_RIGHT)) {
             command = DOWN;
             //TODO implement after Springboard task (#26)
-        } else if (board.checkNearMe(RIGHT, SpringboardType.LEFT_DOWN)) {
+        } else if (board.checkNearMe(RIGHT, SPRINGBOARD_LEFT_DOWN)) {
             command = LEFT;
         }
         return command;

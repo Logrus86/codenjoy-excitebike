@@ -1,11 +1,12 @@
 package com.codenjoy.dojo.excitebike.client;
 
-import com.codenjoy.dojo.excitebike.model.items.Elements;
+import com.codenjoy.dojo.excitebike.model.items.GameElementType;
 import com.codenjoy.dojo.excitebike.model.items.bike.BikeType;
-import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardType;
+import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardElementType;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import org.junit.Test;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -52,12 +53,11 @@ public class BoardTest {
     @Test
     public void getMe__shouldReturnPointWithBikeElement() {
         //given
-        Board board = toBoard(
-                "■■■■■" +
-                " o » " +
-                "  e █" +
-                " _ ▼ " +
-                "■■■■■"
+        Board board = toBoard("■■■■■" +
+                        " o » " +
+                        "  e █" +
+                        " _ ▼ " +
+                        "■■■■■"
         );
 
         //when
@@ -71,12 +71,11 @@ public class BoardTest {
     @Test
     public void getMe__shouldReturnPointWithBikeFallenElement() {
         //given
-        Board board = toBoard(
-                "~■■■■" +
-                "   » " +
-                "  e █" +
-                " z ▼ " +
-                "■■■■■"
+        Board board = toBoard("~■■■■" +
+                        "   » " +
+                        "  e █" +
+                        " z ▼ " +
+                        "■■■■■"
         );
 
         //when
@@ -90,12 +89,11 @@ public class BoardTest {
     @Test
     public void getMe__shouldReturnPointWithBikeInclineLeftElement() {
         //given
-        Board board = toBoard(
-                "■■■■■" +
-                " e » " +
-                "  ( █" +
-                " x ▼ " +
-                "■■■■■"
+        Board board = toBoard("■■■■■" +
+                        " e » " +
+                        "  ( █" +
+                        " x ▼ " +
+                        "■■■■■"
         );
 
         //when
@@ -109,12 +107,11 @@ public class BoardTest {
     @Test
     public void getMe__shouldReturnPointWithBikeInclineRightElement() {
         //given
-        Board board = toBoard(
-                "■■■■■" +
-                " x » " +
-                "  z █" +
-                " _ ) " +
-                "■■■■■"
+        Board board = toBoard("■■■■■" +
+                        " x » " +
+                        "  z █" +
+                        " _ ) " +
+                        "■■■■■"
         );
 
         //when
@@ -128,12 +125,11 @@ public class BoardTest {
     @Test
     public void isGameOver__shouldReturnTrueIfThereIsBikeFallenElement() {
         //given
-        Board board = toBoard(
-                "■■■■■" +
-                "   » " +
-                "  e █" +
-                " z ▼ " +
-                "■■~■■"
+        Board board = toBoard("■■■■■" +
+                        "   » " +
+                        "  e █" +
+                        " z ▼ " +
+                        "■■~■■"
         );
 
         //when
@@ -146,12 +142,11 @@ public class BoardTest {
     @Test
     public void isGameOver__shouldReturnFalseIfThereIsNoBikeFallenElement() {
         //given
-        Board board = toBoard(
-                "■■■■■" +
-                " o »)" +
-                "( e █" +
-                " z ▼ " +
-                "■■_■■"
+        Board board = toBoard("■■■■■" +
+                        " o »)" +
+                        "( e █" +
+                        " z ▼ " +
+                        "■■_■■"
         );
 
         //when
@@ -164,16 +159,15 @@ public class BoardTest {
     @Test
     public void checkNearMe__shouldReturnTrueIfThereIsOneOfExpectedElementsNearMeAtRightDirection() {
         //given
-        Board board = toBoard(
-                "■■■■■" +
-                " o»  " +
-                "  e █" +
-                " z ▼ " +
-                "■■_■■"
+        Board board = toBoard("■■■■■" +
+                        " o»  " +
+                        "  e █" +
+                        " z ▼ " +
+                        "■■_■■"
         );
 
         //when
-        boolean result = board.checkNearMe(Direction.RIGHT, Elements.ACCELERATOR);
+        boolean result = board.checkNearMe(Direction.RIGHT, GameElementType.ACCELERATOR);
 
         //then
         assertThat(result, is(true));
@@ -182,12 +176,11 @@ public class BoardTest {
     @Test
     public void checkNearMe__shouldReturnTrueIfThereIsOneOfExpectedElementsNearMeAtDownDirection() {
         //given
-        Board board = toBoard(
-                "■■■■■" +
-                " z   " +
-                " e █ " +
-                " o ▼ " +
-                "■■_■■"
+        Board board = toBoard("■■■■■" +
+                        " z   " +
+                        " e █ " +
+                        " o ▼ " +
+                        "■■_■■"
         );
 
         //when
@@ -200,16 +193,15 @@ public class BoardTest {
     @Test
     public void checkNearMe__shouldReturnTrueIfThereIsOneOfExpectedElementsNearMeAtLeftDirection() {
         //given
-        Board board = toBoard(
-                "■■■■■" +
-                "╝o»  " +
-                " e █ " +
-                " z ▼ " +
-                "■■_■■"
+        Board board = toBoard("■■■■■" +
+                        "╝o»  " +
+                        " e █ " +
+                        " z ▼ " +
+                        "■■_■■"
         );
 
         //when
-        boolean result = board.checkNearMe(Direction.LEFT, SpringboardType.RIGHT_DOWN);
+        boolean result = board.checkNearMe(Direction.LEFT, SpringboardElementType.SPRINGBOARD_RIGHT_DOWN);
 
         //then
         assertThat(result, is(true));
@@ -218,16 +210,15 @@ public class BoardTest {
     @Test
     public void checkNearMe__shouldReturnTrueIfThereIsOneOfExpectedElementsNearMeAtUpDirection() {
         //given
-        Board board = toBoard(
-                "■■■■■" +
-                "╝x»  " +
-                " e █ " +
-                " o ▼ " +
-                "■■_■■"
+        Board board = toBoard("■■■■■" +
+                        "╝x»  " +
+                        " e █ " +
+                        " o ▼ " +
+                        "■■_■■"
         );
 
         //when
-        boolean result = board.checkNearMe(Direction.DOWN, Elements.BORDER);
+        boolean result = board.checkNearMe(Direction.DOWN, GameElementType.BORDER);
 
         //then
         assertThat(result, is(false));
@@ -236,12 +227,11 @@ public class BoardTest {
     @Test
     public void checkAtMe__shouldReturnTrue__ifAtMeIsGivenElement() {
         //given
-        Board board = toBoard(
-                "■■■■■" +
-                "╝x»  " +
-                " e █ " +
-                " ( ▼ " +
-                "■■_■■"
+        Board board = toBoard("■■■■■" +
+                        "╝x»  " +
+                        " e █ " +
+                        " ( ▼ " +
+                        "■■_■■"
         );
 
         //when
@@ -254,12 +244,11 @@ public class BoardTest {
     @Test
     public void checkAtMe__shouldReturnFalse__ifAtMeIsNotGivenElement() {
         //given
-        Board board = toBoard(
-                "■■■■■" +
-                "╝x»  " +
-                " e █ " +
-                " o ▼ " +
-                "■■_■■"
+        Board board = toBoard("■■■■■" +
+                        "╝x»  " +
+                        " e █ " +
+                        " o ▼ " +
+                        "■■_■■"
         );
 
         //when
