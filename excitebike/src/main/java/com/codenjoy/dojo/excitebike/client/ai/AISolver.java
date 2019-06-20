@@ -62,7 +62,12 @@ public class AISolver implements Solver<Board> {
     public String get(final Board board) {
         if (board.isGameOver()) return "";
         Direction result = getCommand(board);
+        result = invertIfNeeded(result);
         return result.toString();
+    }
+
+    private Direction invertIfNeeded(Direction original) {
+        return (original == DOWN || original == UP) ? original.inverted() : original;
     }
 
     private Direction getCommand(Board board) {
@@ -115,7 +120,7 @@ public class AISolver implements Solver<Board> {
     }
 
     private boolean randomBoolean() {
-        return dice.next(1) == 1;
+        return dice.next(2) == 1;
     }
 
 }

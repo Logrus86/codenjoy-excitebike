@@ -60,21 +60,28 @@ public class Board extends AbstractBoard<CharElements> {
     }
 
     public Point getMe() {
-        return get(BIKE, BIKE_FALLEN, BIKE_INCLINE_LEFT, BIKE_INCLINE_RIGHT).get(0);
+        return get(BIKE, BIKE_FALLEN, BIKE_INCLINE_LEFT, BIKE_INCLINE_RIGHT)
+                .stream()
+                .findFirst()
+                .orElse(null);
     }
 
     public boolean isGameOver() {
-        return isAt(getMe(), BIKE_FALLEN);
+        Point me = getMe();
+        return me == null || isAt(me, BIKE_FALLEN);
     }
 
     public boolean checkNearMe(Direction direction, CharElements... elements) {
         Point me = getMe();
+        if (me == null) {
+            return false;
+        }
         Point atDirection = direction.change(me);
         return isAt(atDirection.getX(), atDirection.getY(), elements);
     }
 
     public boolean checkAtMe(CharElements element) {
         Point me = getMe();
-        return isAt(me, element);
+        return me != null && isAt(me, element);
     }
 }
