@@ -178,6 +178,102 @@ public class GameFieldImplSystemTest {
     }
 
     @Test
+    public void right__shouldInclineBikeToRight__IfBikeIsNotInclinedAndAtAccelerator() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "  B> " +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+
+        //when
+        bike.right();
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                "  C  " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void right__shouldInclineBikeToRight__IfBikeIsNotInclinedAndAtInhibitor() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "  B< " +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+
+        //when
+        bike.right();
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                "  M  " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void right__shouldInclineBikeToRight__IfBikeIsNotInclinedAndAtLineChangerDown() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "  B▼ " +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+
+        //when
+        bike.right();
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                "  O  " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void right__shouldInclineBikeToRight__IfBikeIsNotInclinedAndAtLineChangerUp() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "  B▲ " +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+
+        //when
+        bike.right();
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                "  N  " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
     public void right__shouldInclineBikeToRight__IfBikeIsInclinedToLeft() {
         //given
         String board = "■■■■■" +
