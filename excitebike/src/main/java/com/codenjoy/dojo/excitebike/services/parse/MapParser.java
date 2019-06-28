@@ -34,7 +34,7 @@ public interface MapParser {
 
     int getYSize();
 
-    List<Bike> getBikes();
+    List<Bike> getFallenBikes();
 
     List<Accelerator> getAccelerators();
 
