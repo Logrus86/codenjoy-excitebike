@@ -38,15 +38,17 @@ import java.util.Collections;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class GameFieldImplTest {
-    GameField gameField;
-    MapParser mapParser;
-    Dice dice;
+
+    private GameField gameField;
+    private MapParser mapParser;
+    private Dice dice;
 
     @Before
     public void init() {
@@ -171,17 +173,53 @@ public class GameFieldImplTest {
     }
 
     @Test
-    public void getEnemyBike__shouldReturnSingletonListOfGivenBike() {
+    public void getEnemyBike__shouldReturnEmptyOptional__ifThereIsOnlyThisBikeAtGivenCoordinates() {
         //given
         gameField = new GameFieldImpl(mapParser, dice);
         Player player = new Player(mock(EventListener.class));
         gameField.newGame(player);
 
         //when
-        Optional<Bike> enemyBike = gameField.getEnemyBike(player.getHero().getX(), player.getHero().getY());
+        Optional<Bike> result = gameField.getEnemyBike(player.getHero().getX(), player.getHero().getY(), player);
 
         //then
-        assertThat(enemyBike.isPresent(), is(true));
+        assertThat(result.isPresent(), is(false));
+    }
+
+    @Test
+    public void getEnemyBike__shouldReturnEmptyOptional__ifGivenPlayerIsNull() {
+        //given
+        gameField = new GameFieldImpl(mapParser, dice);
+        Player player = new Player(mock(EventListener.class));
+        gameField.newGame(player);
+
+        //when
+        Optional<Bike> result = gameField.getEnemyBike(player.getHero().getX(), player.getHero().getY(), null);
+
+        //then
+        assertThat(result.isPresent(), is(false));
+    }
+
+    @Test
+    public void getEnemyBike__shouldReturnOptionalWithEnemyBike__ifThereIsOneAtGivenCoordinates() {
+        //given
+        gameField = new GameFieldImpl(mapParser, dice);
+        int x = 1;
+        int y = 1;
+        Bike thisBike = new Bike(x, y);
+        Bike enemyBike = new Bike(x, y);
+        Player thisPlayer = new Player(mock(EventListener.class));
+        thisPlayer.setHero(thisBike);
+        Player enemyPlayer = new Player(mock(EventListener.class));
+        enemyPlayer.setHero(enemyBike);
+        gameField.newGame(thisPlayer);
+        gameField.newGame(enemyPlayer);
+
+        //when
+        Optional<Bike> result = gameField.getEnemyBike(x, y, thisPlayer);
+
+        //then
+        assertThat(result.isPresent(), is(true));
     }
 
     @Test
@@ -235,5 +273,34 @@ public class GameFieldImplTest {
         assertThat(gameField.isAccelerator(xSize-1, 1), is(true));
     }
 
+    @Test
+    public void getPlayerOfBike__shouldReturnNull__ifThereIsNoPlayerWithGivenBike() {
+        //given
+        gameField = new GameFieldImpl(mapParser, dice);
+        Player player = new Player(mock(EventListener.class));
+        gameField.newGame(player);
 
+        //when
+        Player result = gameField.getPlayerOfBike(new Bike(2, 22));
+
+        //then
+        assertThat(result, nullValue());
+    }
+
+    @Test
+    public void getPlayerOfBike__shouldReturnOptionalWithEnemyBike__ifThereIsOneAtGivenCoordinates() {
+        //given
+        gameField = new GameFieldImpl(mapParser, dice);
+        int x = 1;
+        int y = 1;
+        Bike givenBike = new Bike(x, y);
+        Player givenPlayer = new Player(mock(EventListener.class));
+        givenPlayer.setHero(givenBike);
+        gameField.newGame(givenPlayer);
+        //when
+        Player result = gameField.getPlayerOfBike(givenBike);
+
+        //then
+        assertThat(result, is(givenPlayer));
+    }
 }

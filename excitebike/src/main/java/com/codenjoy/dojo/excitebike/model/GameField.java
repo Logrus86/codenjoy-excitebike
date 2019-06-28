@@ -43,7 +43,9 @@ public interface GameField extends com.codenjoy.dojo.services.multiplayer.GameFi
 
     boolean isDownLineChanger(int x, int y);
 
-    Optional<Bike> getEnemyBike(int x, int y);
+    Optional<Bike> getEnemyBike(int x, int y, Player player);
 
     int getPlayersNumber();
+
+    Player getPlayerOfBike(Bike bike);
 }
