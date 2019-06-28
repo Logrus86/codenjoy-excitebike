@@ -272,6 +272,35 @@ public class MultiplayerSystemTest {
     }
 
     @Test
+    public void shouldDoNothingAfterBikesClashEachOther__bike1__tick2() {
+        //given
+        init();
+        when(dice.next(anyInt())).thenReturn(5);
+        Bike bike1 = (Bike) game1.getPlayer().getHero();
+        bike1.setX(bike1.getX()+1);
+        Bike bike3 = (Bike) game3.getPlayer().getHero();
+        bike3.setX(bike3.getX()+1);
+        game1.getJoystick().up();
+        game2.getJoystick().down();
+        field.tick();
+
+        //when
+        game1.getJoystick().up();
+        game2.getJoystick().down();
+        field.tick();
+
+        //then
+        String expected = "■■■■■■■\n" +
+                "       \n" +
+                "       \n" +
+                " E     \n" +
+                " E     \n" +
+                " B     \n" +
+                "■■■■■■■\n";
+        assertThat(game1.getBoardAsString(), is(expected));
+    }
+
+    @Test
     public void shouldDoNothingAfterBikesClashEachOther__bike2() {
         //given
         init();
