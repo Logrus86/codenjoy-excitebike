@@ -40,18 +40,20 @@ import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.CharElements;
 
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static java.util.Map.Entry.comparingByValue;
+import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
 
@@ -85,6 +87,9 @@ public class GameFieldImpl implements GameField {
         shiftTrack();
         players.forEach(player -> player.getHero().tick());
         players.forEach(player -> player.getHero().setTicked(false));
+        players.parallelStream()
+                .filter(p -> !p.getHero().isAlive())
+                .forEach(p -> allShiftableElements.get(BikeType.BIKE_FALLEN).add(p.getHero()));
     }
 
     public int size() {
@@ -260,7 +265,7 @@ public class GameFieldImpl implements GameField {
             int rndNonBorderLaneNumber = dice.next(laneNumber - 2) + 1;
 
             GameElementType randomType = GameElementType.values()[rndNonBorderElementOrdinal];
-            List<Shiftable> elements = (List<Shiftable>) allShiftableElements.get(randomType);
+            List<Shiftable> elements = allShiftableElements.get(randomType);
             Shiftable newElement = getNewElement(randomType, firstPossibleX, rndNonBorderLaneNumber);
             elements.add(newElement);
         }

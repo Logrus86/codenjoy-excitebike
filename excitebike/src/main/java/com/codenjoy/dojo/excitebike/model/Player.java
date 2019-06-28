@@ -25,11 +25,9 @@ package com.codenjoy.dojo.excitebike.model;
 
 import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
 import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 
 public class Player extends GamePlayer<Bike, GameField> {
-    private static final int BIKE_START_X = 1;
 
     private Bike bike;
 

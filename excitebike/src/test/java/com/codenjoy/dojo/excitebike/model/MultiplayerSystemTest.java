@@ -237,6 +237,10 @@ public class MultiplayerSystemTest {
         //given
         init();
         when(dice.next(anyInt())).thenReturn(5);
+        Bike bike1 = (Bike) game1.getPlayer().getHero();
+        bike1.setX(bike1.getX()+1);
+        Bike bike3 = (Bike) game3.getPlayer().getHero();
+        bike3.setX(bike3.getX()+1);
 
         //when
         game1.getJoystick().up();
@@ -259,6 +263,10 @@ public class MultiplayerSystemTest {
         //given
         init();
         when(dice.next(anyInt())).thenReturn(5);
+        Bike bike1 = (Bike) game1.getPlayer().getHero();
+        bike1.setX(bike1.getX()+1);
+        Bike bike3 = (Bike) game3.getPlayer().getHero();
+        bike3.setX(bike3.getX()+1);
 
         //when
         game1.getJoystick().up();
