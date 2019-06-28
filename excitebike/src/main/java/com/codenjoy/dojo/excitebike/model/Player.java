@@ -39,7 +39,7 @@ public class Player extends GamePlayer<Bike, GameField> {
         return bike;
     }
 
-    void setHero(Bike bike) {
+    public void setHero(Bike bike) {
         this.bike = bike;
     }
 

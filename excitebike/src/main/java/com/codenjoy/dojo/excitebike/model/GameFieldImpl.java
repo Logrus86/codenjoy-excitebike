@@ -23,8 +23,15 @@ package com.codenjoy.dojo.excitebike.model;
  */
 
 
-import com.codenjoy.dojo.excitebike.model.items.*;
+import com.codenjoy.dojo.excitebike.model.items.Accelerator;
+import com.codenjoy.dojo.excitebike.model.items.Border;
+import com.codenjoy.dojo.excitebike.model.items.GameElementType;
+import com.codenjoy.dojo.excitebike.model.items.Inhibitor;
+import com.codenjoy.dojo.excitebike.model.items.LineChanger;
+import com.codenjoy.dojo.excitebike.model.items.Obstacle;
+import com.codenjoy.dojo.excitebike.model.items.Shiftable;
 import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
+import com.codenjoy.dojo.excitebike.model.items.bike.BikeType;
 import com.codenjoy.dojo.excitebike.services.Events;
 import com.codenjoy.dojo.excitebike.services.parse.MapParser;
 import com.codenjoy.dojo.services.Dice;
@@ -32,8 +39,15 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.printer.CharElements;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -46,11 +60,8 @@ public class GameFieldImpl implements GameField {
 
     private Dice dice;
     private MapParser mapParser;
-
-    private Map<GameElementType, List<? extends Shiftable>> allShiftableElements = new EnumMap<>(GameElementType.class);
-
+    private Map<CharElements, List<Shiftable>> allShiftableElements = new HashMap<>();
     private List<Player> players = new LinkedList<>();
-
     private List<Border> borders;
 
     public GameFieldImpl(MapParser mapParser, Dice dice) {
@@ -59,11 +70,12 @@ public class GameFieldImpl implements GameField {
 
         borders = mapParser.getBorders();
 
-        allShiftableElements.put(GameElementType.ACCELERATOR, mapParser.getAccelerators());
-        allShiftableElements.put(GameElementType.INHIBITOR, mapParser.getInhibitors());
-        allShiftableElements.put(GameElementType.OBSTACLE, mapParser.getObstacles());
-        allShiftableElements.put(GameElementType.LINE_CHANGER_UP, mapParser.getLineUpChangers());
-        allShiftableElements.put(GameElementType.LINE_CHANGER_DOWN, mapParser.getLineDownChangers());
+        allShiftableElements.put(GameElementType.ACCELERATOR, new ArrayList<>(mapParser.getAccelerators()));
+        allShiftableElements.put(GameElementType.INHIBITOR, new ArrayList<>(mapParser.getInhibitors()));
+        allShiftableElements.put(GameElementType.OBSTACLE, new ArrayList<>(mapParser.getObstacles()));
+        allShiftableElements.put(GameElementType.LINE_CHANGER_UP, new ArrayList<>(mapParser.getLineUpChangers()));
+        allShiftableElements.put(GameElementType.LINE_CHANGER_DOWN, new ArrayList<>(mapParser.getLineDownChangers()));
+        allShiftableElements.put(BikeType.BIKE_FALLEN, new ArrayList<>(mapParser.getFallenBikes()));
     }
 
     /**
@@ -74,6 +86,9 @@ public class GameFieldImpl implements GameField {
         shiftTrack();
         players.forEach(player -> player.getHero().tick());
         players.forEach(player -> player.getHero().setTicked(false));
+        players.parallelStream()
+                .filter(p -> !p.getHero().isAlive())
+                .forEach(p -> allShiftableElements.get(BikeType.BIKE_FALLEN).add(p.getHero()));
         if (players.stream().filter(Player::isAlive).count() == 1 && players.size() > 1) {
             players.stream().filter(Player::isAlive).findFirst().ifPresent(player -> player.event(Events.WIN));
             restart();
@@ -120,8 +135,13 @@ public class GameFieldImpl implements GameField {
     }
 
     @Override
-    public Optional<Bike> getEnemyBike(int x, int y) {
-        return players.parallelStream().map(Player::getHero).filter(bike -> bike.itsMe(x, y)).findFirst();
+    public Optional<Bike> getEnemyBike(int x, int y, Player player) {
+        return player != null ?
+                players.parallelStream()
+                        .map(Player::getHero)
+                        .filter(bike -> bike.state(player).name().contains(Bike.OTHER_BIKE_PREFIX) && bike.itsMe(x, y))
+                        .findFirst()
+                : Optional.empty();
     }
 
     @Override
@@ -253,7 +273,7 @@ public class GameFieldImpl implements GameField {
             int rndNonBorderLaneNumber = dice.next(laneNumber - 2) + 1;
 
             GameElementType randomType = GameElementType.values()[rndNonBorderElementOrdinal];
-            List<Shiftable> elements = (List<Shiftable>) allShiftableElements.get(randomType);
+            List<Shiftable> elements = allShiftableElements.get(randomType);
             Shiftable newElement = getNewElement(randomType, firstPossibleX, rndNonBorderLaneNumber);
             elements.add(newElement);
         }
@@ -276,4 +296,8 @@ public class GameFieldImpl implements GameField {
         }
     }
 
+    @Override
+    public Player getPlayerOfBike(Bike bike) {
+        return players.parallelStream().filter(p -> Objects.equals(p.getHero(), bike)).findFirst().orElse(null);
+    }
 }
