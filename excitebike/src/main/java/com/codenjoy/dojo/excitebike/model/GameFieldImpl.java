@@ -50,10 +50,17 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static java.util.Map.Entry.comparingByValue;
-import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.toList;
 
 
 public class GameFieldImpl implements GameField {
