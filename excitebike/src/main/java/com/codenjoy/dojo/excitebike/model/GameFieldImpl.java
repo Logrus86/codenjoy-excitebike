@@ -87,9 +87,10 @@ public class GameFieldImpl implements GameField {
         shiftTrack();
         players.forEach(player -> player.getHero().tick());
         players.forEach(player -> player.getHero().setTicked(false));
-        players.parallelStream()
+        allShiftableElements.put(BikeType.BIKE_FALLEN, players.parallelStream()
                 .filter(p -> !p.getHero().isAlive())
-                .forEach(p -> allShiftableElements.get(BikeType.BIKE_FALLEN).add(p.getHero()));
+                .map(Player::getHero)
+                .collect(Collectors.toList()));
     }
 
     public int size() {
