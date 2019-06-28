@@ -1746,7 +1746,7 @@ public class GameFieldImplSystemTest {
         String board = "■■■■■" +
                 "     " +
                 "     " +
-                "o    " +
+                "B    " +
                 "■■■■■";
         init(board);
         when(dice.next(anyInt())).thenReturn(0, 0, 2);
@@ -1756,9 +1756,9 @@ public class GameFieldImplSystemTest {
 
         //then
         String expected = "■■■■■" +
-                "    »" +
+                "    >" +
                 "     " +
-                "o    " +
+                "B    " +
                 "■■■■■";
         assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
