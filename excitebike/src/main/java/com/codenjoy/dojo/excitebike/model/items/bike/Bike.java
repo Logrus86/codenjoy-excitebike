@@ -140,25 +140,22 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
 
     @Override
     public void tick() {
-        if (!ticked) {
-            if (isAlive()) {
-                actAccordingToState();
-                executeCommand();
-                adjustStateToElement();
-                tryToMove();
-            }
+        if (!ticked && isAlive()) {
+            actAccordingToState();
+            executeCommand();
+            adjustStateToElement();
+            tryToMove();
         }
     }
 
     private void executeCommand() {
+        interacted = false;
         if (command != null) {
             x = command.changeX(x);
             y = command.changeY(y);
             interactWithOtherBike();
             adjustStateToElement();
             command = null;
-        } else {
-            interacted = false;
         }
     }
 
