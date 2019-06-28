@@ -100,15 +100,6 @@ public class GameFieldImpl implements GameField {
         players.parallelStream()
                 .filter(p -> !p.getHero().isAlive())
                 .forEach(p -> allShiftableElements.get(BikeType.BIKE_FALLEN).add(p.getHero()));
-        if (players.stream().filter(Player::isAlive).count() == 1 && players.size() > 1) {
-            players.stream().filter(Player::isAlive).findFirst().ifPresent(player -> player.event(Events.WIN));
-            restart();
-        }
-    }
-
-    private void restart(){
-        players.forEach(player -> player.setHero(null));
-        allShiftableElements.values().forEach(List::clear);
     }
 
     public int size() {
