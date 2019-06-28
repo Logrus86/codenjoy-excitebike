@@ -51,12 +51,13 @@ import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_INCLIN
 import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_INCLINE_LEFT_AT_INHIBITOR;
 import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_INCLINE_LEFT_AT_LINE_CHANGER_DOWN;
 import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_INCLINE_LEFT_AT_LINE_CHANGER_UP;
-import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_INCLINE_RIGHT;
 import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_INCLINE_RIGHT_AT_ACCELERATOR;
 import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_INCLINE_RIGHT_AT_INHIBITOR;
 import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_INCLINE_RIGHT_AT_LINE_CHANGER_DOWN;
 import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_INCLINE_RIGHT_AT_LINE_CHANGER_UP;
 import static com.codenjoy.dojo.services.Direction.DOWN;
+import static com.codenjoy.dojo.services.Direction.LEFT;
+import static com.codenjoy.dojo.services.Direction.RIGHT;
 import static com.codenjoy.dojo.services.Direction.UP;
 
 public class Bike extends PlayerHero<GameField> implements State<BikeType, Player>, Shiftable {
@@ -66,6 +67,12 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
     public static final String INCLINE_LEFT_AT_PREFIX = "BIKE_INCLINE_LEFT_AT";
     public static final String INCLINE_RIGHT_AT_PREFIX = "BIKE_INCLINE_RIGHT_AT";
     public static final String BIKE_AT_PREFIX = "BIKE_AT";
+    public static final String INCLINE_SUFFIX = "_INCLINE_";
+    public static final String BIKE_PREFIX = "BIKE";
+    public static final String AT_ACCELERATOR_SUFFIX = "_AT_ACCELERATOR";
+    public static final String AT_INHIBITOR_SUFFIX = "_AT_INHIBITOR";
+    public static final String AT_LINE_CHANGER_UP_SUFFIX = "_AT_LINE_CHANGER_UP";
+    public static final String AT_LINE_CHANGER_DOWN_SUFFIX = "_AT_LINE_CHANGER_DOWN";
 
     private Direction command;
     private Movement movement = new Movement();
@@ -103,20 +110,21 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
     @Override
     public void left() {
         if (!isAlive()) return;
-        changeIncline(BIKE_INCLINE_LEFT, BIKE_INCLINE_RIGHT);
+        changeIncline(LEFT);
     }
 
     @Override
     public void right() {
         if (!isAlive()) return;
-        changeIncline(BIKE_INCLINE_RIGHT, BIKE_INCLINE_LEFT);
+        changeIncline(RIGHT);
     }
 
-    private void changeIncline(BikeType toIncline, BikeType inclinedTo) {
-        if (type == BIKE) {
-            type = toIncline;
-        } else if (type == inclinedTo) {
-            type = BIKE;
+    private void changeIncline(Direction direction) {
+        String oppositeIncline = INCLINE_SUFFIX + (direction == LEFT ? RIGHT.name() : LEFT.name());
+        if (type.name().contains(oppositeIncline)) {
+            type = BikeType.valueOf(type.name().replace(oppositeIncline, ""));
+        } else if (!type.name().contains(INCLINE_SUFFIX + direction.name())) {
+            type = BikeType.valueOf(type.name().replace(BIKE_PREFIX, BIKE_PREFIX + INCLINE_SUFFIX + direction.name()));
         }
     }
 
@@ -165,7 +173,7 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
                 || type == BIKE_INCLINE_RIGHT_AT_ACCELERATOR
                 || accelerated) {
             movement.setRight();
-            type = backToNormalType();
+            type = atNothingType();
             accelerated = false;
             return;
         }
@@ -177,7 +185,7 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
                 movement.setLeft();
                 inhibited = true;
             }
-            type = backToNormalType();
+            type = atNothingType();
             return;
         } else {
             inhibited = false;
@@ -187,7 +195,7 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
                 || type == BIKE_INCLINE_LEFT_AT_LINE_CHANGER_UP
                 || type == BIKE_INCLINE_RIGHT_AT_LINE_CHANGER_UP) {
             movement.setUp();
-            type = backToNormalType();
+            type = atNothingType();
             return;
         }
 
@@ -195,14 +203,14 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
                 || type == BIKE_INCLINE_LEFT_AT_LINE_CHANGER_DOWN
                 || type == BIKE_INCLINE_RIGHT_AT_LINE_CHANGER_DOWN) {
             movement.setDown();
-            type = backToNormalType();
+            type = atNothingType();
         }
 
     }
 
-    private BikeType backToNormalType() {
+    private BikeType atNothingType() {
         return type.name().contains(INCLINE_LEFT_AT_PREFIX) ? BIKE_INCLINE_LEFT :
-                type.name().contains(INCLINE_RIGHT_AT_PREFIX) ? BIKE_INCLINE_RIGHT :
+                type.name().contains(INCLINE_RIGHT_AT_PREFIX) ? BikeType.BIKE_INCLINE_RIGHT :
                         type.name().contains(BIKE_AT_PREFIX) ? BIKE : type;
     }
 
@@ -223,7 +231,7 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
             }
         }
         if (movement.isRight()) {
-            x = Direction.RIGHT.changeX(x);
+            x = RIGHT.changeX(x);
             if (x >= field.size()) {
                 x = field.size() - 1;
             }
@@ -289,13 +297,23 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
         }
 
         if (field.isAccelerator(x, y)) {
-            type = BIKE_AT_ACCELERATOR;
+            if (type == BIKE_AT_DOWNED_BIKE) {
+                type = BIKE_AT_INHIBITOR;
+            } else if (!type.name().contains(AT_ACCELERATOR_SUFFIX)) {
+                type = BikeType.valueOf(type.name() + AT_ACCELERATOR_SUFFIX);
+            }
             accelerated = true;
             return;
         }
 
         if (field.isInhibitor(x, y)) {
-            type = type == BIKE_AT_ACCELERATOR ? BIKE : BIKE_AT_INHIBITOR;
+            if (type == BIKE_AT_DOWNED_BIKE) {
+                type = BIKE_AT_ACCELERATOR;
+            } else if (type.name().contains(AT_ACCELERATOR_SUFFIX)) {
+                type = BikeType.valueOf(type.name().replace(AT_ACCELERATOR_SUFFIX, ""));
+            } else if (!type.name().contains(AT_INHIBITOR_SUFFIX)) {
+                type = BikeType.valueOf(type.name() + AT_INHIBITOR_SUFFIX);
+            }
             if (movement.isRight()) {
                 movement.setLeft();
                 inhibited = true;
@@ -315,7 +333,11 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
             if (movement.isRight()) {
                 movement.setUp();
             } else {
-                type = BIKE_AT_LINE_CHANGER_UP;
+                if (type == BIKE_AT_DOWNED_BIKE) {
+                    type = BIKE_AT_LINE_CHANGER_UP;
+                } else if (!type.name().contains(AT_LINE_CHANGER_UP_SUFFIX)) {
+                    type = BikeType.valueOf(type.name() + AT_LINE_CHANGER_UP_SUFFIX);
+                }
             }
             return;
         }
@@ -324,7 +346,11 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
             if (movement.isRight()) {
                 movement.setDown();
             } else {
-                type = BIKE_AT_LINE_CHANGER_DOWN;
+                if (type == BIKE_AT_DOWNED_BIKE) {
+                    type = BIKE_AT_LINE_CHANGER_DOWN;
+                } else if (!type.name().contains(AT_LINE_CHANGER_DOWN_SUFFIX)) {
+                    type = BikeType.valueOf(type.name() + AT_LINE_CHANGER_DOWN_SUFFIX);
+                }
             }
             return;
         }
@@ -335,14 +361,13 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
         }
 
         if (!field.getEnemyBike(x, y, field.getPlayerOfBike(this)).isPresent()) {
-            type = backToNormalType();
+            type = atNothingType();
         }
     }
 
     @Override
     public BikeType state(Player player, Object... alsoAtPoint) {
         Bike bike = player.getHero();
-
         return this == bike ? bike.type : this.getEnemyBikeType();
     }
 
