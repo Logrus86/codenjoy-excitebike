@@ -46,7 +46,6 @@ import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_FALLEN
 import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_FALLEN_AT_LINE_CHANGER_DOWN;
 import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_FALLEN_AT_LINE_CHANGER_UP;
 import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_FALLEN_AT_OBSTACLE;
-import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_INCLINE_LEFT;
 import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_INCLINE_LEFT_AT_ACCELERATOR;
 import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_INCLINE_LEFT_AT_INHIBITOR;
 import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_INCLINE_LEFT_AT_LINE_CHANGER_DOWN;
@@ -64,9 +63,7 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
 
     public static final String OTHER_BIKE_PREFIX = "OTHER";
     public static final String FALLEN_BIKE_SUFFIX = "FALLEN";
-    public static final String INCLINE_LEFT_AT_PREFIX = "BIKE_INCLINE_LEFT_AT";
-    public static final String INCLINE_RIGHT_AT_PREFIX = "BIKE_INCLINE_RIGHT_AT";
-    public static final String BIKE_AT_PREFIX = "BIKE_AT";
+    public static final String BIKE_AT_PREFIX = "AT_";
     public static final String INCLINE_SUFFIX = "_INCLINE_";
     public static final String BIKE_PREFIX = "BIKE";
     public static final String AT_ACCELERATOR_SUFFIX = "_AT_ACCELERATOR";
@@ -162,7 +159,6 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
             x = command.changeX(x);
             y = command.changeY(y);
             interactWithOtherBike();
-            adjustStateToElement();
             command = null;
         }
     }
@@ -209,12 +205,14 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
     }
 
     private BikeType atNothingType() {
-        return type.name().contains(INCLINE_LEFT_AT_PREFIX) ? BIKE_INCLINE_LEFT :
-                type.name().contains(INCLINE_RIGHT_AT_PREFIX) ? BikeType.BIKE_INCLINE_RIGHT :
-                        type.name().contains(BIKE_AT_PREFIX) ? BIKE : type;
+        return type.name().contains(BIKE_AT_PREFIX)
+                ? BikeType.valueOf(type.name().substring(0, type.name().indexOf(BIKE_AT_PREFIX) - 1))
+                : type;
     }
 
     private void tryToMove() {
+        int xBefore = x;
+        int yBefore = y;
         if (!isAlive()) {
             return;
         }
@@ -238,7 +236,9 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
         }
         interactWithOtherBike();
         movement.clear();
-        adjustStateToElement();
+        if (xBefore != x || yBefore != y) {
+            adjustStateToElement();
+        }
     }
 
     private void interactWithOtherBike() {
@@ -297,9 +297,10 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
         }
 
         if (field.isAccelerator(x, y)) {
-            if (type == BIKE_AT_DOWNED_BIKE) {
-                type = BIKE_AT_INHIBITOR;
-            } else if (!type.name().contains(AT_ACCELERATOR_SUFFIX)) {
+            if (type.name().contains(BIKE_AT_PREFIX)) {
+                String substringBikeAtSomething = type.name().substring(type.name().indexOf(BIKE_AT_PREFIX) - 1);
+                type = BikeType.valueOf(type.name().replace(substringBikeAtSomething, AT_ACCELERATOR_SUFFIX));
+            } else {
                 type = BikeType.valueOf(type.name() + AT_ACCELERATOR_SUFFIX);
             }
             accelerated = true;
@@ -307,11 +308,12 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
         }
 
         if (field.isInhibitor(x, y)) {
-            if (type == BIKE_AT_DOWNED_BIKE) {
-                type = BIKE_AT_ACCELERATOR;
-            } else if (type.name().contains(AT_ACCELERATOR_SUFFIX)) {
+            if (type.name().contains(AT_ACCELERATOR_SUFFIX)) {
                 type = BikeType.valueOf(type.name().replace(AT_ACCELERATOR_SUFFIX, ""));
-            } else if (!type.name().contains(AT_INHIBITOR_SUFFIX)) {
+            } else if (type.name().contains(BIKE_AT_PREFIX)) {
+                String substringBikeAtSomething = type.name().substring(type.name().indexOf(BIKE_AT_PREFIX) - 1);
+                type = BikeType.valueOf(type.name().replace(substringBikeAtSomething, AT_INHIBITOR_SUFFIX));
+            } else {
                 type = BikeType.valueOf(type.name() + AT_INHIBITOR_SUFFIX);
             }
             if (movement.isRight()) {
