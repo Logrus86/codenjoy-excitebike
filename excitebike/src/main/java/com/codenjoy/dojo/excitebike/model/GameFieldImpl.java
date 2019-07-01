@@ -31,7 +31,6 @@ import com.codenjoy.dojo.excitebike.model.items.LineChanger;
 import com.codenjoy.dojo.excitebike.model.items.Obstacle;
 import com.codenjoy.dojo.excitebike.model.items.Shiftable;
 import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
-import com.codenjoy.dojo.excitebike.model.items.bike.BikeType;
 import com.codenjoy.dojo.excitebike.services.Events;
 import com.codenjoy.dojo.excitebike.services.parse.MapParser;
 import com.codenjoy.dojo.services.Dice;
@@ -41,15 +40,6 @@ import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.CharElements;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -61,6 +51,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static com.codenjoy.dojo.excitebike.model.items.GameElementType.ACCELERATOR;
+import static com.codenjoy.dojo.excitebike.model.items.GameElementType.INHIBITOR;
+import static com.codenjoy.dojo.excitebike.model.items.GameElementType.LINE_CHANGER_DOWN;
+import static com.codenjoy.dojo.excitebike.model.items.GameElementType.LINE_CHANGER_UP;
+import static com.codenjoy.dojo.excitebike.model.items.GameElementType.OBSTACLE;
+import static com.codenjoy.dojo.excitebike.model.items.bike.Bike.OTHER_BIKE_PREFIX;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_FALLEN;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static java.util.Map.Entry.comparingByValue;
 import static java.util.stream.Collectors.groupingBy;
@@ -81,12 +78,12 @@ public class GameFieldImpl implements GameField {
 
         borders = mapParser.getBorders();
 
-        allShiftableElements.put(GameElementType.ACCELERATOR, new ArrayList<>(mapParser.getAccelerators()));
-        allShiftableElements.put(GameElementType.INHIBITOR, new ArrayList<>(mapParser.getInhibitors()));
-        allShiftableElements.put(GameElementType.OBSTACLE, new ArrayList<>(mapParser.getObstacles()));
-        allShiftableElements.put(GameElementType.LINE_CHANGER_UP, new ArrayList<>(mapParser.getLineUpChangers()));
-        allShiftableElements.put(GameElementType.LINE_CHANGER_DOWN, new ArrayList<>(mapParser.getLineDownChangers()));
-        allShiftableElements.put(BikeType.BIKE_FALLEN, new ArrayList<>(mapParser.getFallenBikes()));
+        allShiftableElements.put(ACCELERATOR, new ArrayList<>(mapParser.getAccelerators()));
+        allShiftableElements.put(INHIBITOR, new ArrayList<>(mapParser.getInhibitors()));
+        allShiftableElements.put(OBSTACLE, new ArrayList<>(mapParser.getObstacles()));
+        allShiftableElements.put(LINE_CHANGER_UP, new ArrayList<>(mapParser.getLineUpChangers()));
+        allShiftableElements.put(LINE_CHANGER_DOWN, new ArrayList<>(mapParser.getLineDownChangers()));
+        allShiftableElements.put(BIKE_FALLEN, new ArrayList<>(mapParser.getFallenBikes()));
     }
 
     /**
@@ -97,9 +94,20 @@ public class GameFieldImpl implements GameField {
         shiftTrack();
         players.forEach(player -> player.getHero().tick());
         players.forEach(player -> player.getHero().setTicked(false));
-        players.parallelStream()
-                .filter(p -> !p.getHero().isAlive())
-                .forEach(p -> allShiftableElements.get(BikeType.BIKE_FALLEN).add(p.getHero()));
+        if (players.stream().filter(Player::isAlive).count() <= 1 && players.size() > 1) {
+            players.stream().filter(Player::isAlive).findFirst().ifPresent(player -> player.event(Events.WIN));
+            restart();
+        }
+        allShiftableElements.put(BIKE_FALLEN, players.stream()
+                .map(Player::getHero)
+                .filter(h -> h != null && !h.isAlive())
+                .collect(toList())
+        );
+    }
+
+    private void restart() {
+        players.forEach(player -> player.setHero(null));
+        allShiftableElements.values().forEach(List::clear);
     }
 
     public int size() {
@@ -113,27 +121,27 @@ public class GameFieldImpl implements GameField {
 
     @Override
     public boolean isInhibitor(int x, int y) {
-        return allShiftableElements.get(GameElementType.INHIBITOR).contains(pt(x, y));
+        return allShiftableElements.get(INHIBITOR).contains(pt(x, y));
     }
 
     @Override
     public boolean isAccelerator(int x, int y) {
-        return allShiftableElements.get(GameElementType.ACCELERATOR).contains(pt(x, y));
+        return allShiftableElements.get(ACCELERATOR).contains(pt(x, y));
     }
 
     @Override
     public boolean isObstacle(int x, int y) {
-        return allShiftableElements.get(GameElementType.OBSTACLE).contains(pt(x, y));
+        return allShiftableElements.get(OBSTACLE).contains(pt(x, y));
     }
 
     @Override
     public boolean isUpLineChanger(int x, int y) {
-        return allShiftableElements.get(GameElementType.LINE_CHANGER_UP).contains(pt(x, y));
+        return allShiftableElements.get(LINE_CHANGER_UP).contains(pt(x, y));
     }
 
     @Override
     public boolean isDownLineChanger(int x, int y) {
-        return allShiftableElements.get(GameElementType.LINE_CHANGER_DOWN).contains(pt(x, y));
+        return allShiftableElements.get(LINE_CHANGER_DOWN).contains(pt(x, y));
     }
 
     @Override
@@ -141,7 +149,7 @@ public class GameFieldImpl implements GameField {
         return player != null ?
                 players.parallelStream()
                         .map(Player::getHero)
-                        .filter(bike -> bike.state(player).name().contains(Bike.OTHER_BIKE_PREFIX) && bike.itsMe(x, y))
+                        .filter(bike -> bike.state(player).name().contains(OTHER_BIKE_PREFIX) && bike.itsMe(x, y))
                         .findFirst()
                 : Optional.empty();
     }
@@ -207,7 +215,7 @@ public class GameFieldImpl implements GameField {
     }
 
     private boolean isFree(Point point) {
-        return !getBikes().contains(point) && !borders.contains(point) && !allShiftableElements.get(GameElementType.OBSTACLE).contains(point);
+        return !getBikes().contains(point) && !borders.contains(point) && !allShiftableElements.get(OBSTACLE).contains(point);
     }
 
     public List<Bike> getBikes() {
