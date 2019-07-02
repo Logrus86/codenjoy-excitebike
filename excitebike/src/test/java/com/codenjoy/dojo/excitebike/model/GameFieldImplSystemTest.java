@@ -1817,7 +1817,7 @@ public class GameFieldImplSystemTest {
     }
 
     @Test
-    public void actright__shouldDoNothing() {
+    public void act__shouldDoNothing() {
         //given
         String board = "■■■■■" +
                 "     " +
