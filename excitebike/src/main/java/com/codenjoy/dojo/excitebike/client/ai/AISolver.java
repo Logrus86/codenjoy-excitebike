@@ -81,8 +81,8 @@ public class AISolver implements Solver<Board> {
     private Direction getCommand(Board board) {
         return checksChain(board,
                 this::neutralizeOrForceLineChanging,
-                this::pushUpDownBike,
-                this::evadeElementAtRight
+                this::evadeElementAtRight,
+                this::pushUpDownBike
         );
     }
 
@@ -176,6 +176,9 @@ public class AISolver implements Solver<Board> {
                 && board.checkNearMe(Lists.newArrayList(RIGHT, RIGHT, RIGHT, UP), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_DOWNED_BIKE, OBSTACLE, BORDER))
                 || board.checkNearMe(Lists.newArrayList(RIGHT, RIGHT), LINE_CHANGER_UP)
                 && board.checkNearMe(Lists.newArrayList(RIGHT, RIGHT, RIGHT, DOWN), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_DOWNED_BIKE, OBSTACLE, BORDER))
+                || board.checkNearMe(Lists.newArrayList(RIGHT, RIGHT), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_DOWNED_BIKE, OBSTACLE))
+                && board.checkNearMe(Lists.newArrayList(RIGHT, RIGHT, UP), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_DOWNED_BIKE, OBSTACLE, BORDER))
+                && board.checkNearMe(Lists.newArrayList(RIGHT, RIGHT, DOWN), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_DOWNED_BIKE, OBSTACLE, BORDER))
         ) {
             if (isVerticalDirectionClear(board, UP) && !isVerticalDirectionClear(board, DOWN)) {
                 command = UP;
@@ -190,8 +193,9 @@ public class AISolver implements Solver<Board> {
     }
 
     private boolean isVerticalDirectionClear(Board board, Direction toCheck) {
-        return !board.checkNearMe(toCheck, getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_DOWNED_BIKE, BORDER, OBSTACLE))
-                && !board.checkNearMe(Lists.newArrayList(toCheck, RIGHT), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_DOWNED_BIKE, BORDER, OBSTACLE));
+        CharElements[] elementsToCheck = getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_DOWNED_BIKE, BORDER, OBSTACLE);
+        return !board.checkNearMe(toCheck, elementsToCheck) && !board.checkNearMe(toCheck, getBikeElementsBySuffixAndElements(Bike.OTHER_BIKE_PREFIX))
+                && !board.checkNearMe(Lists.newArrayList(toCheck, RIGHT), elementsToCheck);
     }
 
 }

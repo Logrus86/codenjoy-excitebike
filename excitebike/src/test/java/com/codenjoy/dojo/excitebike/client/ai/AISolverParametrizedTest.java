@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.Random;
 
 import static com.codenjoy.dojo.services.Direction.DOWN;
+import static com.codenjoy.dojo.services.Direction.STOP;
 import static com.codenjoy.dojo.services.Direction.UP;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -65,7 +66,7 @@ public class AISolverParametrizedTest {
                         "  B| " +
                         "     " +
                         "■■■■■",
-                        null},
+                        STOP},
 
                 new Object[]{"2. avoid obstacle - choose not border above",
                         "■■■■■" +
@@ -121,7 +122,7 @@ public class AISolverParametrizedTest {
                         "  BE " +
                         "     " +
                         "■■■■■",
-                        null},
+                        STOP},
 
                 new Object[]{"9. avoid other bike - choose not border above",
                         "■■■■■" +
@@ -177,7 +178,7 @@ public class AISolverParametrizedTest {
                         "  Be " +
                         "     " +
                         "■■■■■",
-                        null},
+                        STOP},
 
                 new Object[]{"16. avoid fallen bike - choose not border above",
                         "■■■■■" +
@@ -905,7 +906,47 @@ public class AISolverParametrizedTest {
                         "  B>e" +
                         "     " +
                         "■■■■■",
-                        DOWN}
+                        DOWN},
+
+                new Object[]{"107. go down if there is bike above and obstacle in front",
+                        "■■■■■" +
+                        "  E  " +
+                        "  B| " +
+                        "     " +
+                        "■■■■■",
+                        DOWN},
+
+                new Object[]{"108. go up if there is bike below and fallen bike at inhibitor in front",
+                        "■■■■■" +
+                        "     " +
+                        "  Bq " +
+                        "  E  " +
+                        "■■■■■",
+                        UP},
+
+                new Object[]{"109. go up if there is fallen bike at line changer up below and accelerator leading to line changer down leading to obstacle in front",
+                        "■■■■■" +
+                        "     " +
+                        " B>▼ " +
+                        "  s |" +
+                        "■■■■■",
+                        UP},
+
+                new Object[]{"110. go down if there is fallen bike at obstacle above and accelerator leading to line changer up leading to other bike at downed bike in front",
+                        "■■■■■" +
+                        "  v l" +
+                        " B>▲ " +
+                        "     " +
+                        "■■■■■",
+                        DOWN},
+
+                new Object[]{"111. go to random up/down if there is obstacle in 2 cells in front and obstacles below and above in 1 cell",
+                        "■■■■■" +
+                        "    |" +
+                        "  B |" +
+                        "    |" +
+                        "■■■■■",
+                        STOP}
         );
     }
 
@@ -913,7 +954,7 @@ public class AISolverParametrizedTest {
     public void get__shouldReturnAppropriateDirection__accordingToGameElementTypeAround() {
         //given
         Board board = toBoard(boardString);
-        if (expectedDirection == null) {
+        if (expectedDirection == STOP) {
             when(dice.next(2)).then((Answer<Integer>) invocationOnMock -> {
                 int randomInt = new Random().nextInt(2);
                 expectedDirection = randomInt == 1 ? DOWN : UP;
