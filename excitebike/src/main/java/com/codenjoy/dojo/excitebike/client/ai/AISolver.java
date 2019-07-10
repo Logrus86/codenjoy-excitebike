@@ -153,18 +153,17 @@ public class AISolver implements Solver<Board> {
                 && !board.checkNearMe(Lists.newArrayList(direction, RIGHT), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OBSTACLE))
                 && !board.checkNearMe(Lists.newArrayList(direction, RIGHT), OTHER_BIKE_AT_INHIBITOR)
                 && !(board.checkNearMe(Lists.newArrayList(direction, RIGHT), ACCELERATOR)
-                && board.checkNearMe(Lists.newArrayList(direction, RIGHT, RIGHT), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OBSTACLE))
-                || board.checkNearMe(Lists.newArrayList(direction, RIGHT, RIGHT), getBikeElementsBySuffixAndElements(Bike.OTHER_BIKE_PREFIX))
+                && (board.checkNearMe(Lists.newArrayList(direction, RIGHT, RIGHT), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OBSTACLE))
+                || board.checkNearMe(Lists.newArrayList(direction, RIGHT, RIGHT), getBikeElementsBySuffixAndElements(Bike.OTHER_BIKE_PREFIX)))
         );
     }
 
     private boolean isOtherBikeAliveAndShouldBeAvoided(Board board, Direction direction) {
         return board.checkNearMe(direction, getBikeElementsBySuffixAndElements(Bike.OTHER_BIKE_PREFIX))
-                && (direction == UP && board.checkNearMe(direction, OTHER_BIKE_AT_LINE_CHANGER_UP))
-                || (direction == DOWN && board.checkNearMe(direction, OTHER_BIKE_AT_LINE_CHANGER_DOWN))
-                || (direction == UP && board.checkNearMe(Lists.newArrayList(direction, RIGHT), LINE_CHANGER_UP))
-                || (direction == DOWN && board.checkNearMe(Lists.newArrayList(direction, RIGHT), LINE_CHANGER_DOWN)
-        );
+                && (direction == UP && board.checkNearMe(direction, OTHER_BIKE_AT_LINE_CHANGER_UP)
+                || direction == DOWN && board.checkNearMe(direction, OTHER_BIKE_AT_LINE_CHANGER_DOWN)
+                || direction == UP && board.checkNearMe(Lists.newArrayList(direction, RIGHT), LINE_CHANGER_UP)
+                || direction == DOWN && board.checkNearMe(Lists.newArrayList(direction, RIGHT), LINE_CHANGER_DOWN));
     }
 
     private CharElements[] getBikeElementsBySuffixAndElements(String suffix, CharElements... elements) {
