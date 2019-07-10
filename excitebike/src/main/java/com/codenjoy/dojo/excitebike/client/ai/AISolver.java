@@ -179,24 +179,24 @@ public class AISolver implements Solver<Board> {
 
     private Direction evadeElementAtRight(Board board) {
         Direction command = null;
-        if (!board.checkAtMe(BIKE_AT_LINE_CHANGER_DOWN, BIKE_AT_LINE_CHANGER_UP)
-                && board.checkNearMe(RIGHT, getBikeElementsBySuffixAndElements(Bike.OTHER_BIKE_PREFIX, OBSTACLE))
-                || board.checkNearMe(RIGHT, getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_DOWNED_BIKE))
-                || board.checkNearMe(RIGHT, LINE_CHANGER_DOWN)
-                && board.checkNearMe(Lists.newArrayList(UP, RIGHT), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_DOWNED_BIKE, OBSTACLE, BORDER))
-                || board.checkNearMe(RIGHT, LINE_CHANGER_UP)
-                && board.checkNearMe(Lists.newArrayList(DOWN, RIGHT), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_DOWNED_BIKE, OBSTACLE, BORDER))
-                || board.checkNearMe(RIGHT, ACCELERATOR)
-                && board.checkNearMe(Lists.newArrayList(RIGHT, RIGHT), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_DOWNED_BIKE, OBSTACLE))
-                || board.checkNearMe(Lists.newArrayList(RIGHT, RIGHT), getBikeElementsBySuffixAndElements(Bike.OTHER_BIKE_PREFIX))
-                || board.checkNearMe(Lists.newArrayList(RIGHT, RIGHT), LINE_CHANGER_DOWN)
-                && board.checkNearMe(Lists.newArrayList(RIGHT, RIGHT, RIGHT, UP), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_DOWNED_BIKE, OBSTACLE, BORDER))
-                || board.checkNearMe(Lists.newArrayList(RIGHT, RIGHT), LINE_CHANGER_UP)
-                && board.checkNearMe(Lists.newArrayList(RIGHT, RIGHT, RIGHT, DOWN), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_DOWNED_BIKE, OBSTACLE, BORDER))
-                || board.checkNearMe(Lists.newArrayList(RIGHT, RIGHT), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_DOWNED_BIKE, OBSTACLE))
-                && board.checkNearMe(Lists.newArrayList(RIGHT, RIGHT, UP), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_DOWNED_BIKE, OBSTACLE, BORDER))
-                && board.checkNearMe(Lists.newArrayList(RIGHT, RIGHT, DOWN), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_DOWNED_BIKE, OBSTACLE, BORDER))
-        ) {
+        if (!board.checkAtMe(BIKE_AT_LINE_CHANGER_DOWN, BIKE_AT_LINE_CHANGER_UP) &&
+                (board.checkNearMe(RIGHT, getBikeElementsBySuffixAndElements(Bike.OTHER_BIKE_PREFIX, OBSTACLE))
+                        || board.checkNearMe(RIGHT, getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_DOWNED_BIKE))
+                        || board.checkNearMe(RIGHT, LINE_CHANGER_DOWN)
+                        && board.checkNearMe(Lists.newArrayList(UP, RIGHT), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_DOWNED_BIKE, OBSTACLE, BORDER))
+                        || board.checkNearMe(RIGHT, LINE_CHANGER_UP)
+                        && board.checkNearMe(Lists.newArrayList(DOWN, RIGHT), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_DOWNED_BIKE, OBSTACLE, BORDER))
+                        || board.checkNearMe(RIGHT, ACCELERATOR)
+                        && (board.checkNearMe(Lists.newArrayList(RIGHT, RIGHT), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_DOWNED_BIKE, OBSTACLE))
+                        || board.checkNearMe(Lists.newArrayList(RIGHT, RIGHT), getBikeElementsBySuffixAndElements(Bike.OTHER_BIKE_PREFIX))
+                        || board.checkNearMe(Lists.newArrayList(RIGHT, RIGHT), LINE_CHANGER_DOWN)
+                        && board.checkNearMe(Lists.newArrayList(RIGHT, RIGHT, RIGHT, UP), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_DOWNED_BIKE, OBSTACLE, BORDER))
+                        || board.checkNearMe(Lists.newArrayList(RIGHT, RIGHT), LINE_CHANGER_UP)
+                        && board.checkNearMe(Lists.newArrayList(RIGHT, RIGHT, RIGHT, DOWN), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_DOWNED_BIKE, OBSTACLE, BORDER)))
+                        || board.checkNearMe(Lists.newArrayList(RIGHT, RIGHT), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_DOWNED_BIKE, OBSTACLE))
+                        && board.checkNearMe(Lists.newArrayList(RIGHT, RIGHT, UP), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_DOWNED_BIKE, OBSTACLE, BORDER))
+                        && board.checkNearMe(Lists.newArrayList(RIGHT, RIGHT, DOWN), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_DOWNED_BIKE, OBSTACLE, BORDER))
+                )) {
             if (isVerticalDirectionClear(board, UP) && !isVerticalDirectionClear(board, DOWN)) {
                 command = UP;
             } else if (isVerticalDirectionClear(board, DOWN) && !isVerticalDirectionClear(board, UP)) {
