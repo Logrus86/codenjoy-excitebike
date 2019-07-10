@@ -675,7 +675,7 @@ public class AISolverParametrizedTest {
                         "     " +
                         "■■■■■",
                         DOWN},
-                
+
                 new Object[]{"78. go down if there is another bike at line changer up in front and obstacle above",
                         "■■■■■" +
                         "   | " +
@@ -683,7 +683,7 @@ public class AISolverParametrizedTest {
                         "     " +
                         "■■■■■",
                         DOWN},
-                
+
                 new Object[]{"79. go down if there is another bike at line changer down in front and obstacle above",
                         "■■■■■" +
                         "   | " +
@@ -691,7 +691,7 @@ public class AISolverParametrizedTest {
                         "     " +
                         "■■■■■",
                         DOWN},
-                
+
                 new Object[]{"80. go down if there is another bike at downed bike in front and obstacle above",
                         "■■■■■" +
                         "   | " +
@@ -946,7 +946,39 @@ public class AISolverParametrizedTest {
                         "  B |" +
                         "    |" +
                         "■■■■■",
-                        STOP}
+                        STOP},
+
+                new Object[]{"112. go to up if there is other bike below and line changer up in front of it",
+                        "■■■■■" +
+                        "     " +
+                        "  B  " +
+                        "  E▲ " +
+                        "■■■■■",
+                        UP},
+
+                new Object[]{"113. go to up if there is other bike at line changer up below",
+                        "■■■■■" +
+                        "     " +
+                        "  B  " +
+                        "  S  " +
+                        "■■■■■",
+                        UP},
+
+                new Object[]{"114. go down if there is other bike at downed bike above and line changer down in front of it",
+                        "■■■■■" +
+                        "  l▼ " +
+                        "  B  " +
+                        "     " +
+                        "■■■■■",
+                        DOWN},
+
+                new Object[]{"115. go down if there is other bike at line changer down above",
+                        "■■■■■" +
+                        "  T  " +
+                        "  B  " +
+                        "     " +
+                        "■■■■■",
+                        DOWN}
         );
     }
 

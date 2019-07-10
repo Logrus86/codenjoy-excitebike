@@ -47,6 +47,8 @@ import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_AT_LIN
 import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_AT_LINE_CHANGER_UP;
 import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.OTHER_BIKE_AT_DOWNED_BIKE;
 import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.OTHER_BIKE_AT_INHIBITOR;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.OTHER_BIKE_AT_LINE_CHANGER_DOWN;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.OTHER_BIKE_AT_LINE_CHANGER_UP;
 import static com.codenjoy.dojo.services.Direction.DOWN;
 import static com.codenjoy.dojo.services.Direction.RIGHT;
 import static com.codenjoy.dojo.services.Direction.UP;
@@ -82,7 +84,7 @@ public class AISolver implements Solver<Board> {
         return checksChain(board,
                 this::neutralizeOrForceLineChanging,
                 this::evadeElementAtRight,
-                this::pushUpDownBike
+                this::pushOrEvadeUpDownBike
         );
     }
 
@@ -119,20 +121,25 @@ public class AISolver implements Solver<Board> {
         return null;
     }
 
-    private Direction pushUpDownBike(Board board) {
-        Direction command = null;
-        boolean otherBikeAboveAliveAndShouldBePushed = isOtherBikeAliveAndShouldBePushed(board, UP);
-        boolean otherBikeBelowAliveAndShouldBePushed = isOtherBikeAliveAndShouldBePushed(board, DOWN);
-        if (otherBikeAboveAliveAndShouldBePushed && otherBikeBelowAliveAndShouldBePushed) {
-            command = randomUpDown();
-        }
-        if (otherBikeAboveAliveAndShouldBePushed) {
-            command = UP;
+    private Direction pushOrEvadeUpDownBike(Board board) {
+        boolean otherBikeBelowAliveAndShouldBePushed = isOtherBikeAliveAndShouldBePushed(board, UP);
+        boolean otherBikeAboveAliveAndShouldBePushed = isOtherBikeAliveAndShouldBePushed(board, DOWN);
+        if (otherBikeBelowAliveAndShouldBePushed && otherBikeAboveAliveAndShouldBePushed) {
+            return randomUpDown();
         }
         if (otherBikeBelowAliveAndShouldBePushed) {
-            command = DOWN;
+            return UP;
         }
-        return command;
+        if (otherBikeAboveAliveAndShouldBePushed) {
+            return DOWN;
+        }
+        if (isOtherBikeAliveAndShouldBeAvoided(board, UP)) {
+            return DOWN;
+        }
+        if (isOtherBikeAliveAndShouldBeAvoided(board, DOWN)) {
+            return UP;
+        }
+        return null;
     }
 
     private Direction randomUpDown() {
@@ -141,12 +148,22 @@ public class AISolver implements Solver<Board> {
 
     private boolean isOtherBikeAliveAndShouldBePushed(Board board, Direction direction) {
         return board.checkNearMe(direction, getBikeElementsBySuffixAndElements(Bike.OTHER_BIKE_PREFIX))
+                && !isOtherBikeAliveAndShouldBeAvoided(board, direction)
                 && !board.checkNearMe(direction, getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX))
                 && !board.checkNearMe(Lists.newArrayList(direction, RIGHT), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OBSTACLE))
                 && !board.checkNearMe(Lists.newArrayList(direction, RIGHT), OTHER_BIKE_AT_INHIBITOR)
                 && !(board.checkNearMe(Lists.newArrayList(direction, RIGHT), ACCELERATOR)
                 && board.checkNearMe(Lists.newArrayList(direction, RIGHT, RIGHT), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OBSTACLE))
                 || board.checkNearMe(Lists.newArrayList(direction, RIGHT, RIGHT), getBikeElementsBySuffixAndElements(Bike.OTHER_BIKE_PREFIX))
+        );
+    }
+
+    private boolean isOtherBikeAliveAndShouldBeAvoided(Board board, Direction direction) {
+        return board.checkNearMe(direction, getBikeElementsBySuffixAndElements(Bike.OTHER_BIKE_PREFIX))
+                && (direction == UP && board.checkNearMe(direction, OTHER_BIKE_AT_LINE_CHANGER_UP))
+                || (direction == DOWN && board.checkNearMe(direction, OTHER_BIKE_AT_LINE_CHANGER_DOWN))
+                || (direction == UP && board.checkNearMe(Lists.newArrayList(direction, RIGHT), LINE_CHANGER_UP))
+                || (direction == DOWN && board.checkNearMe(Lists.newArrayList(direction, RIGHT), LINE_CHANGER_DOWN)
         );
     }
 
