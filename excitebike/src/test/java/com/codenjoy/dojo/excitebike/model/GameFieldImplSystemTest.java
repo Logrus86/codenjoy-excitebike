@@ -91,7 +91,9 @@ public class GameFieldImplSystemTest {
                 " ▲ < " +
                 "■■■■■";
         init(board);
-        when(dice.next(anyInt())).thenReturn(1, 5 , 1);
+        when(dice.next(19)).thenReturn(12);
+        when(dice.next(5)).thenReturn(1);
+        when(dice.next(3)).thenReturn(1);
 
         //when
         game.tick();
@@ -1754,7 +1756,9 @@ public class GameFieldImplSystemTest {
                 "B    " +
                 "■■■■■";
         init(board);
-        when(dice.next(anyInt())).thenReturn(0, 5, 0, 2);
+        when(dice.next(19)).thenReturn(12);
+        when(dice.next(5)).thenReturn(0);
+        when(dice.next(3)).thenReturn(2);
 
         //when
         game.tick();

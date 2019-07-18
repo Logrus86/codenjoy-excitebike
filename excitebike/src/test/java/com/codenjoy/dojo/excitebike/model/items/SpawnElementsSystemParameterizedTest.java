@@ -65,7 +65,9 @@ public class SpawnElementsSystemParameterizedTest {
     @Before
     public void init() {
         dice = mock(Dice.class);
-        game = new GameFieldImpl(mock(MapParser.class), dice);
+        MapParser mapParser = mock(MapParser.class);
+        when(mapParser.getYSize()).thenReturn(5);
+        game = new GameFieldImpl(mapParser, dice);
         player = new Player(mock(EventListener.class));
         game.newGame(player);
     }
@@ -73,7 +75,9 @@ public class SpawnElementsSystemParameterizedTest {
     @Test
     public void shouldGenerateElement() {
         //given
-        when(dice.next(anyInt())).thenReturn(0,5, gameElementType.ordinal() - 2, 0);
+        when(dice.next(19)).thenReturn(12);
+        when(dice.next(5)).thenReturn(gameElementType.ordinal() - 2);
+        when(dice.next(3)).thenReturn(0);
 
         //when
         game.tick();

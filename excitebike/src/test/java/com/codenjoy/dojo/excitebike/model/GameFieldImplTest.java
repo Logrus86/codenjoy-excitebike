@@ -259,13 +259,14 @@ public class GameFieldImplTest {
     public void tick__shouldGenerateAccelerator() {
         //given
         int xSize = 5;
-        int generateChance = 1; //if less than 5 then element will be generated
+        int ySize = 5;
         int nonFenceElementOrdinal = 0;
         int nonFenceLaneNumber = 0;
 
-        gameField = new GameFieldImpl(mapParser, dice);
         when(mapParser.getXSize()).thenReturn(xSize);
-        when(dice.next(anyInt())).thenReturn(generateChance,5, nonFenceElementOrdinal, nonFenceLaneNumber);
+        when(mapParser.getYSize()).thenReturn(ySize);
+        when(dice.next(anyInt())).thenReturn(12, nonFenceElementOrdinal, nonFenceLaneNumber);
+        gameField = new GameFieldImpl(mapParser, dice);
 
         //when
         gameField.tick();
