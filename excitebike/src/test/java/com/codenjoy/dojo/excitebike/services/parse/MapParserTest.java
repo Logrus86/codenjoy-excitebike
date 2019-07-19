@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.excitebike.model.level;
+package com.codenjoy.dojo.excitebike.services.parse;
 
 /*-
  * #%L
@@ -25,7 +25,6 @@ package com.codenjoy.dojo.excitebike.model.level;
 import com.codenjoy.dojo.excitebike.model.items.GameElementType;
 import com.codenjoy.dojo.excitebike.model.items.bike.BikeType;
 import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardElementType;
-import com.codenjoy.dojo.excitebike.services.parse.MapParserImpl;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.printer.CharElements;
 import com.google.common.collect.Lists;
