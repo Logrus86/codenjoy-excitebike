@@ -50,20 +50,13 @@ public class TrackStepGenerator {
     private final Map<GenerationOption, Generator> optionGeneratorMap = new EnumMap<>(GenerationOption.class);
     private int generationLock;
 
-    public TrackStepGenerator(Dice dice, int xSize, int ySize) {
+    public TrackStepGenerator(Dice dice, int xSize, int ySize, WeightedRandomGenerationOptionBag randomGenerationOptionBag) {
         this.dice = dice;
-
+        this.weightedRandomElementsBag = randomGenerationOptionBag;
         optionGeneratorMap.put(NOTHING, new EmptyGenerator());
         optionGeneratorMap.put(SINGLE_ELEMENT, new SingleElementGenerator(dice, xSize, ySize));
         optionGeneratorMap.put(SPRINGBOARD, new SpringboardGenerator(dice, xSize, ySize));
         optionGeneratorMap.put(OBSTACLE_CHAIN, new ObstacleChainGenerator(dice, xSize, ySize));
-
-        //todo take from the settings:
-        weightedRandomElementsBag = new WeightedRandomGenerationOptionBag();
-        weightedRandomElementsBag.addEntry(NOTHING, 10);
-        weightedRandomElementsBag.addEntry(SINGLE_ELEMENT, 5);
-        weightedRandomElementsBag.addEntry(SPRINGBOARD, 2);
-        weightedRandomElementsBag.addEntry(OBSTACLE_CHAIN, 1);
     }
 
     public Map<? extends CharElements, List<Shiftable>> generate() {

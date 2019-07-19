@@ -43,7 +43,7 @@ import static com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardEl
 public class SpringboardGenerator implements Generator {
 
     static final int CLEAR_LINES_AROUND_SPRINGBOARD = 1;
-    static final int SPRINGBOARD_TOP_MAX_WIDTH = 5;
+    public static final int SPRINGBOARD_TOP_MAX_WIDTH = 5;
     private final Dice dice;
     private final int x0;
     private final int ySize;

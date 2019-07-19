@@ -29,6 +29,7 @@ import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
 import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardElementType;
 import com.codenjoy.dojo.excitebike.services.Events;
 import com.codenjoy.dojo.excitebike.services.generation.TrackStepGenerator;
+import com.codenjoy.dojo.excitebike.services.generation.WeightedRandomGenerationOptionBag;
 import com.codenjoy.dojo.excitebike.services.parse.MapParser;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
@@ -55,6 +56,10 @@ import static com.codenjoy.dojo.excitebike.model.items.GameElementType.LINE_CHAN
 import static com.codenjoy.dojo.excitebike.model.items.GameElementType.OBSTACLE;
 import static com.codenjoy.dojo.excitebike.model.items.bike.Bike.OTHER_BIKE_PREFIX;
 import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_FALLEN;
+import static com.codenjoy.dojo.excitebike.services.generation.GenerationOption.NOTHING;
+import static com.codenjoy.dojo.excitebike.services.generation.GenerationOption.OBSTACLE_CHAIN;
+import static com.codenjoy.dojo.excitebike.services.generation.GenerationOption.SINGLE_ELEMENT;
+import static com.codenjoy.dojo.excitebike.services.generation.GenerationOption.SPRINGBOARD;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static java.util.Map.Entry.comparingByValue;
 import static java.util.stream.Collectors.groupingBy;
@@ -89,7 +94,13 @@ public class GameFieldImpl implements GameField {
         allShiftableElements.put(SpringboardElementType.SPRINGBOARD_RIGHT_DOWN, new ArrayList<>(mapParser.getSpringboardRightDownElements()));
         allShiftableElements.put(SpringboardElementType.SPRINGBOARD_TOP, new ArrayList<>(mapParser.getSpringboardNoneElements()));
 
-        this.trackStepGenerator = new TrackStepGenerator(dice, mapParser.getXSize(), mapParser.getYSize());
+        //todo take from the settings:
+        WeightedRandomGenerationOptionBag weightedRandomElementsBag = new WeightedRandomGenerationOptionBag();
+        weightedRandomElementsBag.addEntry(NOTHING, 10);
+        weightedRandomElementsBag.addEntry(SINGLE_ELEMENT, 5);
+        weightedRandomElementsBag.addEntry(SPRINGBOARD, 2);
+        weightedRandomElementsBag.addEntry(OBSTACLE_CHAIN, 1);
+        this.trackStepGenerator = new TrackStepGenerator(dice, mapParser.getXSize(), mapParser.getYSize(), weightedRandomElementsBag);
     }
 
     /**
