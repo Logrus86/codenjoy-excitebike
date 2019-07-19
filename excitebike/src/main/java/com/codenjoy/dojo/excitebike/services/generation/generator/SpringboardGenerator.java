@@ -26,7 +26,6 @@ import com.codenjoy.dojo.excitebike.model.items.Shiftable;
 import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardElement;
 import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardElementType;
 import com.codenjoy.dojo.services.Dice;
-import com.google.common.collect.Lists;
 
 import java.util.EnumMap;
 import java.util.LinkedList;
@@ -43,12 +42,12 @@ import static com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardEl
 
 public class SpringboardGenerator implements Generator {
 
-    private static final int CLEAR_LINES_AROUND_SPRINGBOARD = 1;
-    private static final int SPRINGBOARD_TOP_MAX_WIDTH = 5;
+    static final int CLEAR_LINES_AROUND_SPRINGBOARD = 1;
+    static final int SPRINGBOARD_TOP_MAX_WIDTH = 5;
+    private final Dice dice;
+    private final int x0;
+    private final int ySize;
     private int width;
-    private int x0;
-    private int ySize;
-    private Dice dice;
     private Map<SpringboardElementType, List<Shiftable>> elements;
 
     public SpringboardGenerator(Dice dice, int xSize, int ySize) {
@@ -60,15 +59,12 @@ public class SpringboardGenerator implements Generator {
     @Override
     public Map<SpringboardElementType, List<Shiftable>> generate() {
         elements = new EnumMap<>(SpringboardElementType.class);
-
         width = dice.next(SPRINGBOARD_TOP_MAX_WIDTH) + 2;
-
         generateRiseLine(ySize);
         for (int i = x0 + 1; i < x0 + width - 1; i++) {
             generateSpringBoardStep(SPRINGBOARD_TOP, SPRINGBOARD_TOP, SPRINGBOARD_LEFT, i, ySize);
         }
         generateDescentLine(x0 + width, ySize);
-
         return elements;
     }
 
@@ -81,21 +77,19 @@ public class SpringboardGenerator implements Generator {
     }
 
     private void generateSpringBoardStep(SpringboardElementType up, SpringboardElementType middle, SpringboardElementType down, int x, int lines) {
-        mergeNewElementToElementsMap(down, x, 1);
+        addNewElement(down, x, 1);
         int y = 2;
         for (; y < lines - 1; y++) {
-            mergeNewElementToElementsMap(middle, x, y);
+            addNewElement(middle, x, y);
         }
-        mergeNewElementToElementsMap(up, x, y);
+        addNewElement(up, x, y);
     }
 
-    private void mergeNewElementToElementsMap(SpringboardElementType type, int x, int y) {
-        elements.merge(type,
-                new LinkedList<>(Lists.newArrayList(new SpringboardElement(x, y, type))),
-                (elementsFromMap, newElements) -> {
-                    elementsFromMap.addAll(newElements);
-                    return elementsFromMap;
-                });
+    private void addNewElement(SpringboardElementType type, int x, int y) {
+        if (!elements.containsKey(type)) {
+            elements.put(type, new LinkedList<>());
+        }
+        elements.get(type).add(new SpringboardElement(x, y, type));
     }
 
     @Override
