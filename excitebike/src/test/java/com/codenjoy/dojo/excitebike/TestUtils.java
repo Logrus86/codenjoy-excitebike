@@ -26,6 +26,8 @@ import com.codenjoy.dojo.excitebike.model.GameField;
 import com.codenjoy.dojo.excitebike.model.Player;
 import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
 import com.codenjoy.dojo.excitebike.model.items.bike.BikeType;
+import com.codenjoy.dojo.excitebike.services.generation.GenerationOption;
+import com.codenjoy.dojo.excitebike.services.generation.WeightedRandomBag;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
@@ -39,6 +41,10 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static com.codenjoy.dojo.excitebike.services.generation.GenerationOption.NOTHING;
+import static com.codenjoy.dojo.excitebike.services.generation.GenerationOption.OBSTACLE_CHAIN;
+import static com.codenjoy.dojo.excitebike.services.generation.GenerationOption.SINGLE_ELEMENT;
+import static com.codenjoy.dojo.excitebike.services.generation.GenerationOption.SPRINGBOARD;
 import static org.mockito.Mockito.mock;
 
 /**
@@ -75,5 +81,14 @@ public class TestUtils {
         Player player = new Player(mock(EventListener.class));
         player.setHero(bike);
         return player;
+    }
+
+    public static WeightedRandomBag<GenerationOption> getWeightedRandomGenerationOptionBag() {
+        WeightedRandomBag<GenerationOption> weightedRandomBag = new WeightedRandomBag<>();
+        weightedRandomBag.addEntry(NOTHING, 10);
+        weightedRandomBag.addEntry(SINGLE_ELEMENT, 5);
+        weightedRandomBag.addEntry(SPRINGBOARD, 2);
+        weightedRandomBag.addEntry(OBSTACLE_CHAIN, 1);
+        return weightedRandomBag;
     }
 }

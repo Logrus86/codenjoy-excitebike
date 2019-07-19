@@ -10,12 +10,12 @@ package com.codenjoy.dojo.excitebike.services.generation;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -55,8 +55,8 @@ public class TrackStepGeneratorTest {
         Dice dice = mock(Dice.class);
         int xSize = 10;
         int ySize = 10;
-        WeightedRandomGenerationOptionBag weightedRandomElementsBag = getWeightedRandomgenerationOptionBag();
-        TrackStepGenerator generator = new TrackStepGenerator(dice, xSize, ySize, weightedRandomElementsBag);
+        WeightedRandomBag weightedRandomBag = getWeightedRandomgenerationOptionBag();
+        TrackStepGenerator generator = new TrackStepGenerator(dice, xSize, ySize, weightedRandomBag);
         when(dice.next(19)).thenReturn(16);
         when(dice.next(SpringboardGenerator.SPRINGBOARD_TOP_MAX_WIDTH)).thenReturn(3);
 
@@ -80,8 +80,8 @@ public class TrackStepGeneratorTest {
         Dice dice = mock(Dice.class);
         int xSize = 10;
         int ySize = 10;
-        WeightedRandomGenerationOptionBag weightedRandomElementsBag = getWeightedRandomgenerationOptionBag();
-        TrackStepGenerator generator = new TrackStepGenerator(dice, xSize, ySize, weightedRandomElementsBag);
+        WeightedRandomBag weightedRandomBag = getWeightedRandomgenerationOptionBag();
+        TrackStepGenerator generator = new TrackStepGenerator(dice, xSize, ySize, weightedRandomBag);
         when(dice.next(19)).thenReturn(16, 12);
         when(dice.next(SpringboardGenerator.SPRINGBOARD_TOP_MAX_WIDTH)).thenReturn(3);
 
@@ -109,8 +109,8 @@ public class TrackStepGeneratorTest {
         Dice dice = mock(Dice.class);
         int xSize = 10;
         int ySize = 10;
-        WeightedRandomGenerationOptionBag weightedRandomElementsBag = getWeightedRandomgenerationOptionBag();
-        TrackStepGenerator generator = new TrackStepGenerator(dice, xSize, ySize, weightedRandomElementsBag);
+        WeightedRandomBag weightedRandomBag = getWeightedRandomgenerationOptionBag();
+        TrackStepGenerator generator = new TrackStepGenerator(dice, xSize, ySize, weightedRandomBag);
         when(dice.next(19)).thenReturn(5);
 
         //when
@@ -126,8 +126,8 @@ public class TrackStepGeneratorTest {
         Dice dice = mock(Dice.class);
         int xSize = 10;
         int ySize = 10;
-        WeightedRandomGenerationOptionBag weightedRandomElementsBag = getWeightedRandomgenerationOptionBag();
-        TrackStepGenerator generator = new TrackStepGenerator(dice, xSize, ySize, weightedRandomElementsBag);
+        WeightedRandomBag weightedRandomBag = getWeightedRandomgenerationOptionBag();
+        TrackStepGenerator generator = new TrackStepGenerator(dice, xSize, ySize, weightedRandomBag);
         when(dice.next(19)).thenReturn(12);
 
         //when
@@ -145,8 +145,8 @@ public class TrackStepGeneratorTest {
         Dice dice = mock(Dice.class);
         int xSize = 10;
         int ySize = 10;
-        WeightedRandomGenerationOptionBag weightedRandomElementsBag = getWeightedRandomgenerationOptionBag();
-        TrackStepGenerator generator = new TrackStepGenerator(dice, xSize, ySize, weightedRandomElementsBag);
+        WeightedRandomBag weightedRandomBag = getWeightedRandomgenerationOptionBag();
+        TrackStepGenerator generator = new TrackStepGenerator(dice, xSize, ySize, weightedRandomBag);
         when(dice.next(19)).thenReturn(18);
 
         //when
@@ -157,12 +157,12 @@ public class TrackStepGeneratorTest {
         assertThat(result.get(GameElementType.OBSTACLE).size(), greaterThan(0));
     }
 
-    private WeightedRandomGenerationOptionBag getWeightedRandomgenerationOptionBag() {
-        WeightedRandomGenerationOptionBag weightedRandomElementsBag = new WeightedRandomGenerationOptionBag();
-        weightedRandomElementsBag.addEntry(NOTHING, 10);
-        weightedRandomElementsBag.addEntry(SINGLE_ELEMENT, 5);
-        weightedRandomElementsBag.addEntry(SPRINGBOARD, 2);
-        weightedRandomElementsBag.addEntry(OBSTACLE_CHAIN, 1);
-        return weightedRandomElementsBag;
+    private WeightedRandomBag getWeightedRandomgenerationOptionBag() {
+        WeightedRandomBag weightedRandomBag = new WeightedRandomBag();
+        weightedRandomBag.addEntry(NOTHING, 10);
+        weightedRandomBag.addEntry(SINGLE_ELEMENT, 5);
+        weightedRandomBag.addEntry(SPRINGBOARD, 2);
+        weightedRandomBag.addEntry(OBSTACLE_CHAIN, 1);
+        return weightedRandomBag;
     }
 }

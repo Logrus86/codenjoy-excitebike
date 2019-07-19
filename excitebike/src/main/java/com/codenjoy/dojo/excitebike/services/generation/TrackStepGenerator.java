@@ -10,12 +10,12 @@ package com.codenjoy.dojo.excitebike.services.generation;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -46,13 +46,13 @@ import static com.codenjoy.dojo.excitebike.services.generation.GenerationOption.
 public class TrackStepGenerator {
 
     private final Dice dice;
-    private final WeightedRandomGenerationOptionBag weightedRandomElementsBag;
+    private final WeightedRandomBag<GenerationOption> weightedRandomBag;
     private final Map<GenerationOption, Generator> optionGeneratorMap = new EnumMap<>(GenerationOption.class);
     private int generationLock;
 
-    public TrackStepGenerator(Dice dice, int xSize, int ySize, WeightedRandomGenerationOptionBag randomGenerationOptionBag) {
+    public TrackStepGenerator(Dice dice, int xSize, int ySize, WeightedRandomBag<GenerationOption> randomGenerationOptionBag) {
         this.dice = dice;
-        this.weightedRandomElementsBag = randomGenerationOptionBag;
+        this.weightedRandomBag = randomGenerationOptionBag;
         optionGeneratorMap.put(NOTHING, new EmptyGenerator());
         optionGeneratorMap.put(SINGLE_ELEMENT, new SingleElementGenerator(dice, xSize, ySize));
         optionGeneratorMap.put(SPRINGBOARD, new SpringboardGenerator(dice, xSize, ySize));
@@ -65,7 +65,7 @@ public class TrackStepGenerator {
             return null;
         }
 
-        GenerationOption generationOption = weightedRandomElementsBag.getRandom(dice);
+        GenerationOption generationOption = weightedRandomBag.getRandom(dice);
         Generator generator = optionGeneratorMap.get(generationOption);
 
         Map<? extends CharElements, List<Shiftable>> generated = generator.generate();

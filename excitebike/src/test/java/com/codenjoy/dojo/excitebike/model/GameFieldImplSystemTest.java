@@ -31,6 +31,7 @@ import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.excitebike.TestUtils.getWeightedRandomGenerationOptionBag;
 import static com.codenjoy.dojo.excitebike.TestUtils.parseBikes;
 import static com.codenjoy.dojo.excitebike.TestUtils.printField;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -53,7 +54,7 @@ public class GameFieldImplSystemTest {
 
     private void init(String board) {
         Bike bike = parseBikes(board).get(0);
-        game = new GameFieldImpl(new MapParserImpl(board), dice);
+        game = new GameFieldImpl(new MapParserImpl(board), dice, getWeightedRandomGenerationOptionBag());
         player = new Player(mock(EventListener.class));
         game.newGame(player);
         player.setHero(bike);
@@ -2315,10 +2316,10 @@ public class GameFieldImplSystemTest {
         game.tick();
 
         //then
-        String expected = "■╔═  "+
-                " /═  "+
-                " /B  "+
-                " ╚/  "+
+        String expected = "■╔═  " +
+                " /═  " +
+                " /B  " +
+                " ╚/  " +
                 "■■■■■";
         assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
@@ -2339,10 +2340,10 @@ public class GameFieldImplSystemTest {
         game.tick();
 
         //then
-        String expected = "■╔B  "+
-                " /═  "+
-                " /═  "+
-                " ╚/  "+
+        String expected = "■╔B  " +
+                " /═  " +
+                " /═  " +
+                " ╚/  " +
                 "■■■■■";
         assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
@@ -2363,10 +2364,10 @@ public class GameFieldImplSystemTest {
         game.tick();
 
         //then
-        String expected = "■╔═  "+
-                " /B  "+
-                " /═  "+
-                " ╚/  "+
+        String expected = "■╔═  " +
+                " /B  " +
+                " /═  " +
+                " ╚/  " +
                 "■■■■■";
         assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
@@ -2387,10 +2388,10 @@ public class GameFieldImplSystemTest {
         game.tick();
 
         //then
-        String expected = "■■╔═ "+
-                " /═  "+
-                " /   "+
-                " ╚/F "+
+        String expected = "■■╔═ " +
+                " /═  " +
+                " /   " +
+                " ╚/F " +
                 "■■■■■";
         assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
@@ -2412,10 +2413,10 @@ public class GameFieldImplSystemTest {
         game.tick();
 
         //then
-        String expected = "■╔═  "+
-                "/═   "+
-                "/    "+
-                "╚//  "+
+        String expected = "■╔═  " +
+                "/═   " +
+                "/    " +
+                "╚//  " +
                 "■■■f■";
         assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
@@ -2440,10 +2441,10 @@ public class GameFieldImplSystemTest {
         game.tick();
 
         //then
-        String expected ="═■■  "+
-                "     "+
-                "     "+
-                "/    "+
+        String expected = "═■■  " +
+                "     " +
+                "     " +
+                "/    " +
                 "■f■■■";
         assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
@@ -2466,10 +2467,10 @@ public class GameFieldImplSystemTest {
         game.tick();
 
         //then
-        String expected = "╔═■  "+
-                "/═   "+
-                "/═   "+
-                "╚/   "+
+        String expected = "╔═■  " +
+                "/═   " +
+                "/═   " +
+                "╚/   " +
                 "■■■■■";
         assertThat(printField(game, player), is(TestUtils.injectN(expected)));
         assertThat(bike.isAlive(), is(false));

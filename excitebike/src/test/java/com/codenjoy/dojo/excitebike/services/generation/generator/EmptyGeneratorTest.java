@@ -24,22 +24,42 @@ package com.codenjoy.dojo.excitebike.services.generation.generator;
 
 import com.codenjoy.dojo.excitebike.model.items.Shiftable;
 import com.codenjoy.dojo.services.printer.CharElements;
+import org.junit.Test;
 
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by Pavel Bobylev 7/18/2019
- */
-public class EmptyGenerator implements Generator {
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsNull.nullValue;
 
-    @Override
-    public Map<? extends CharElements, List<Shiftable>> generate() {
-        return null;
+/**
+ * Created by Pavel Bobylev 7/19/2019
+ */
+public class EmptyGeneratorTest {
+
+    @Test
+    public void generate__shouldReturnNull() {
+        //given
+        EmptyGenerator emptyGenerator = new EmptyGenerator();
+
+        //when
+        Map<? extends CharElements, List<Shiftable>> result = emptyGenerator.generate();
+
+        //then
+        assertThat(result, nullValue());
     }
 
-    @Override
-    public int generationLockSize() {
-        return 0;
+    @Test
+    public void generationLockSize__shouldReturnZero() {
+        //given
+        EmptyGenerator emptyGenerator = new EmptyGenerator();
+        emptyGenerator.generate();
+
+        //when
+        int result = emptyGenerator.generationLockSize();
+
+        //then
+        assertThat(result, is(0));
     }
 }

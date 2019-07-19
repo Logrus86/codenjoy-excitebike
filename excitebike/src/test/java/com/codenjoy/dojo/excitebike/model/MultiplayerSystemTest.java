@@ -42,6 +42,7 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.LinkedList;
 
+import static com.codenjoy.dojo.excitebike.TestUtils.getWeightedRandomGenerationOptionBag;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.anyInt;
@@ -66,7 +67,7 @@ public class MultiplayerSystemTest {
                 "■■■■■■■");
 
         dice = mock(Dice.class);
-        field = new GameFieldImpl(mapParser, dice);
+        field = new GameFieldImpl(mapParser, dice, getWeightedRandomGenerationOptionBag());
         PrinterFactory factory = new PrinterFactoryImpl();
 
         game1 = new Single(new Player(mock(EventListener.class)), factory);

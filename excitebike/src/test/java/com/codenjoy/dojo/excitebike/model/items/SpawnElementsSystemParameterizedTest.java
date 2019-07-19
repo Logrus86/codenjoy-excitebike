@@ -39,10 +39,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import static com.codenjoy.dojo.excitebike.TestUtils.getWeightedRandomGenerationOptionBag;
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -67,7 +67,7 @@ public class SpawnElementsSystemParameterizedTest {
         dice = mock(Dice.class);
         MapParser mapParser = mock(MapParser.class);
         when(mapParser.getYSize()).thenReturn(5);
-        game = new GameFieldImpl(mapParser, dice);
+        game = new GameFieldImpl(mapParser, dice, getWeightedRandomGenerationOptionBag());
         player = new Player(mock(EventListener.class));
         game.newGame(player);
     }

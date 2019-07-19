@@ -42,6 +42,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.IntStream;
 
+import static com.codenjoy.dojo.excitebike.TestUtils.getWeightedRandomGenerationOptionBag;
 import static com.codenjoy.dojo.excitebike.TestUtils.parseBikes;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -177,7 +178,7 @@ public class PlayersSpawnSystemParametrizedTest {
 
         Dice dice = mock(Dice.class);
         when(dice.next(anyInt())).thenReturn(5);
-        GameField field = new GameFieldImpl(mapParser, dice);
+        GameField field = new GameFieldImpl(mapParser, dice, getWeightedRandomGenerationOptionBag());
         PrinterFactory factory = new PrinterFactoryImpl();
 
         List<Game> games = new ArrayList<>();
