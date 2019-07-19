@@ -91,7 +91,7 @@ public class GameRunner extends AbstractGameType implements GameType {
         weightedRandomBag.addEntry(NOTHING, 10);
         weightedRandomBag.addEntry(SINGLE_ELEMENT, 5);
         weightedRandomBag.addEntry(SPRINGBOARD, 2);
-        weightedRandomBag.addEntry(OBSTACLE_CHAIN, 1);
+        weightedRandomBag.addEntry(OBSTACLE_CHAIN, 2);
         return new GameFieldImpl(mapParser, getDice(), weightedRandomBag);
     }
 
