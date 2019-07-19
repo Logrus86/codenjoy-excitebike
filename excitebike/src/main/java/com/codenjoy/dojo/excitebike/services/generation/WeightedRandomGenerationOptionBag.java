@@ -30,7 +30,7 @@ import java.util.List;
 /**
  * Created by Pavel Bobylev 7/18/2019
  */
-public class WeightedRandomGeneratedBag {
+public class WeightedRandomGenerationOptionBag {
 
     private List<Entry> entries = new ArrayList<>();
     private int accumulatedWeight;

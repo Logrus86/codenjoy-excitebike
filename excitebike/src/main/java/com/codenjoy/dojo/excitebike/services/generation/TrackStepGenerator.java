@@ -23,7 +23,6 @@ package com.codenjoy.dojo.excitebike.services.generation;
  */
 
 import com.codenjoy.dojo.excitebike.model.items.Shiftable;
-import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardElementType;
 import com.codenjoy.dojo.excitebike.services.generation.generator.EmptyGenerator;
 import com.codenjoy.dojo.excitebike.services.generation.generator.Generator;
 import com.codenjoy.dojo.excitebike.services.generation.generator.ObstacleChainGenerator;
@@ -35,7 +34,6 @@ import com.codenjoy.dojo.services.printer.CharElements;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiFunction;
 
 import static com.codenjoy.dojo.excitebike.services.generation.GenerationOption.NOTHING;
 import static com.codenjoy.dojo.excitebike.services.generation.GenerationOption.OBSTACLE_CHAIN;
@@ -48,14 +46,12 @@ import static com.codenjoy.dojo.excitebike.services.generation.GenerationOption.
 public class TrackStepGenerator {
 
     private final Dice dice;
-    private final int ySize;
-    private final WeightedRandomGeneratedBag weightedRandomElementsBag;
+    private final WeightedRandomGenerationOptionBag weightedRandomElementsBag;
     private final Map<GenerationOption, Generator> optionGeneratorMap = new EnumMap<>(GenerationOption.class);
     private int generationLock;
 
     public TrackStepGenerator(Dice dice, int xSize, int ySize) {
         this.dice = dice;
-        this.ySize = ySize;
 
         optionGeneratorMap.put(NOTHING, new EmptyGenerator());
         optionGeneratorMap.put(SINGLE_ELEMENT, new SingleElementGenerator(dice, xSize, ySize));
@@ -63,8 +59,8 @@ public class TrackStepGenerator {
         optionGeneratorMap.put(OBSTACLE_CHAIN, new ObstacleChainGenerator(dice, xSize, ySize));
 
         //todo take from the settings:
-        weightedRandomElementsBag = new WeightedRandomGeneratedBag();
-        weightedRandomElementsBag.addEntry(GenerationOption.NOTHING, 10);
+        weightedRandomElementsBag = new WeightedRandomGenerationOptionBag();
+        weightedRandomElementsBag.addEntry(NOTHING, 10);
         weightedRandomElementsBag.addEntry(SINGLE_ELEMENT, 5);
         weightedRandomElementsBag.addEntry(SPRINGBOARD, 2);
         weightedRandomElementsBag.addEntry(OBSTACLE_CHAIN, 1);
