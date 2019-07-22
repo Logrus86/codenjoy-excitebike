@@ -56,12 +56,12 @@ public class TrackStepGeneratorTest {
         int xSize = 10;
         int ySize = 10;
         WeightedRandomBag<GenerationOption> weightedRandomBag = getWeightedRandomgenerationOptionBag();
-        TrackStepGenerator generator = new TrackStepGenerator(dice, xSize, ySize, weightedRandomBag);
+        TrackStepGenerator generator = new TrackStepGenerator(dice, xSize, ySize);
         when(dice.next(19)).thenReturn(16);
         when(dice.next(SpringboardGenerator.SPRINGBOARD_TOP_MAX_WIDTH)).thenReturn(3);
 
         //when
-        Map<? extends CharElements, List<Shiftable>> result = generator.generate();
+        Map<? extends CharElements, List<Shiftable>> result = generator.generate(weightedRandomBag);
 
         //then
         assertThat(result.values(), hasSize(7));
@@ -81,12 +81,12 @@ public class TrackStepGeneratorTest {
         int xSize = 10;
         int ySize = 10;
         WeightedRandomBag<GenerationOption> weightedRandomBag = getWeightedRandomgenerationOptionBag();
-        TrackStepGenerator generator = new TrackStepGenerator(dice, xSize, ySize, weightedRandomBag);
+        TrackStepGenerator generator = new TrackStepGenerator(dice, xSize, ySize);
         when(dice.next(19)).thenReturn(16, 12);
         when(dice.next(SpringboardGenerator.SPRINGBOARD_TOP_MAX_WIDTH)).thenReturn(3);
 
         //when
-        Map<? extends CharElements, List<Shiftable>> result = generator.generate();
+        Map<? extends CharElements, List<Shiftable>> result = generator.generate(weightedRandomBag);
 
         //then
         assertThat(result.values(), hasSize(7));
@@ -98,9 +98,9 @@ public class TrackStepGeneratorTest {
         assertThat(result.get(SpringboardElementType.SPRINGBOARD_RIGHT), hasSize(7));
         assertThat(result.get(SpringboardElementType.SPRINGBOARD_RIGHT_DOWN), hasSize(1));
         for (int i = 1; i <= 7; i++) {
-            assertThat(generator.generate(), nullValue());
+            assertThat(generator.generate(weightedRandomBag), nullValue());
         }
-        assertThat(generator.generate().values(), hasSize(1));
+        assertThat(generator.generate(weightedRandomBag).values(), hasSize(1));
     }
 
     @Test
@@ -110,11 +110,11 @@ public class TrackStepGeneratorTest {
         int xSize = 10;
         int ySize = 10;
         WeightedRandomBag<GenerationOption> weightedRandomBag = getWeightedRandomgenerationOptionBag();
-        TrackStepGenerator generator = new TrackStepGenerator(dice, xSize, ySize, weightedRandomBag);
+        TrackStepGenerator generator = new TrackStepGenerator(dice, xSize, ySize);
         when(dice.next(19)).thenReturn(5);
 
         //when
-        Map<? extends CharElements, List<Shiftable>> result = generator.generate();
+        Map<? extends CharElements, List<Shiftable>> result = generator.generate(weightedRandomBag);
 
         //then
         assertThat(result, nullValue());
@@ -127,15 +127,15 @@ public class TrackStepGeneratorTest {
         int xSize = 10;
         int ySize = 10;
         WeightedRandomBag<GenerationOption> weightedRandomBag = getWeightedRandomgenerationOptionBag();
-        TrackStepGenerator generator = new TrackStepGenerator(dice, xSize, ySize, weightedRandomBag);
+        TrackStepGenerator generator = new TrackStepGenerator(dice, xSize, ySize);
         when(dice.next(19)).thenReturn(12);
 
         //when
-        Map<? extends CharElements, List<Shiftable>> result = generator.generate();
+        Map<? extends CharElements, List<Shiftable>> result = generator.generate(weightedRandomBag);
 
         //then
         assertThat(result.values(), hasSize(1));
-        assertThat(generator.generate().values(), hasSize(1));
+        assertThat(generator.generate(weightedRandomBag).values(), hasSize(1));
         assertThat(result.get(GameElementType.ACCELERATOR), hasSize(1));
     }
 
@@ -146,11 +146,11 @@ public class TrackStepGeneratorTest {
         int xSize = 10;
         int ySize = 10;
         WeightedRandomBag<GenerationOption> weightedRandomBag = getWeightedRandomgenerationOptionBag();
-        TrackStepGenerator generator = new TrackStepGenerator(dice, xSize, ySize, weightedRandomBag);
+        TrackStepGenerator generator = new TrackStepGenerator(dice, xSize, ySize);
         when(dice.next(19)).thenReturn(18);
 
         //when
-        Map<? extends CharElements, List<Shiftable>> result = generator.generate();
+        Map<? extends CharElements, List<Shiftable>> result = generator.generate(weightedRandomBag);
 
         //then
         assertThat(result.values(), hasSize(1));

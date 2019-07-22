@@ -72,9 +72,11 @@ public class GameFieldImpl implements GameField {
     private final List<Player> players = new LinkedList<>();
     private final List<Fence> fences;
     private final TrackStepGenerator trackStepGenerator;
+    private final Settings settings;
 
     public GameFieldImpl(MapParser mapParser, Dice dice, Settings settings) {
         this.mapParser = mapParser;
+        this.settings = settings;
 
         fences = mapParser.getFences();
 
@@ -93,8 +95,7 @@ public class GameFieldImpl implements GameField {
         allShiftableElements.put(SpringboardElementType.SPRINGBOARD_RIGHT_DOWN, new ArrayList<>(mapParser.getSpringboardRightDownElements()));
         allShiftableElements.put(SpringboardElementType.SPRINGBOARD_TOP, new ArrayList<>(mapParser.getSpringboardNoneElements()));
 
-        WeightedRandomBag<GenerationOption> weightedRandomBag = SettingsHandler.getWeightedRandomBag(settings);
-        this.trackStepGenerator = new TrackStepGenerator(dice, mapParser.getXSize(), mapParser.getYSize(), weightedRandomBag);
+        this.trackStepGenerator = new TrackStepGenerator(dice, mapParser.getXSize(), mapParser.getYSize());
     }
 
     /**
@@ -103,6 +104,8 @@ public class GameFieldImpl implements GameField {
     @Override
     public void tick() {
         shiftTrack();
+        generateNewTrackStep();
+
         players.forEach(player -> player.getHero().tick());
         players.forEach(player -> player.getHero().setTicked(false));
         if (players.stream().filter(Player::isAlive).count() <= 1 && players.size() > 1) {
@@ -301,12 +304,11 @@ public class GameFieldImpl implements GameField {
                     pointsOfElementType.removeIf(point -> point.getX() < lastPossibleX);
                 }
         );
-
-        generateNewTrackStep();
     }
 
     private void generateNewTrackStep() {
-        Map<? extends CharElements, List<Shiftable>> generated = trackStepGenerator.generate();
+        WeightedRandomBag<GenerationOption> weightedRandomBag = SettingsHandler.getWeightedRandomBag(settings);
+        Map<? extends CharElements, List<Shiftable>> generated = trackStepGenerator.generate(weightedRandomBag);
         if (generated != null) {
             generated.forEach((key, elements) -> allShiftableElements.merge(key, elements, (currentElements, newElements) -> {
                         currentElements.addAll(newElements);

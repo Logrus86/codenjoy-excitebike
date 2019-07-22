@@ -46,20 +46,18 @@ import static com.codenjoy.dojo.excitebike.services.generation.GenerationOption.
 public class TrackStepGenerator {
 
     private final Dice dice;
-    private final WeightedRandomBag<GenerationOption> weightedRandomBag;
     private final Map<GenerationOption, Generator> optionGeneratorMap = new EnumMap<>(GenerationOption.class);
     private int generationLock;
 
-    public TrackStepGenerator(Dice dice, int xSize, int ySize, WeightedRandomBag<GenerationOption> randomGenerationOptionBag) {
+    public TrackStepGenerator(Dice dice, int xSize, int ySize) {
         this.dice = dice;
-        this.weightedRandomBag = randomGenerationOptionBag;
         optionGeneratorMap.put(NOTHING, new EmptyGenerator());
         optionGeneratorMap.put(SINGLE_ELEMENT, new SingleElementGenerator(dice, xSize, ySize));
         optionGeneratorMap.put(SPRINGBOARD, new SpringboardGenerator(dice, xSize, ySize));
         optionGeneratorMap.put(OBSTACLE_CHAIN, new ObstacleChainGenerator(dice, xSize, ySize));
     }
 
-    public Map<? extends CharElements, List<Shiftable>> generate() {
+    public Map<? extends CharElements, List<Shiftable>> generate(WeightedRandomBag<GenerationOption> weightedRandomBag) {
         if (generationLock > 0) {
             generationLock--;
             return null;
