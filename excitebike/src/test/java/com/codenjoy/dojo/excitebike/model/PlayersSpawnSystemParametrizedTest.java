@@ -23,6 +23,7 @@ package com.codenjoy.dojo.excitebike.model;
  */
 
 import com.codenjoy.dojo.excitebike.model.items.bike.BikeType;
+import com.codenjoy.dojo.excitebike.services.SettingsHandler;
 import com.codenjoy.dojo.excitebike.services.parse.MapParser;
 import com.codenjoy.dojo.excitebike.services.parse.MapParserImpl;
 import com.codenjoy.dojo.services.Dice;
@@ -42,7 +43,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import static com.codenjoy.dojo.excitebike.TestUtils.getWeightedRandomGenerationOptionBag;
 import static com.codenjoy.dojo.excitebike.TestUtils.parseBikes;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -178,7 +178,7 @@ public class PlayersSpawnSystemParametrizedTest {
 
         Dice dice = mock(Dice.class);
         when(dice.next(anyInt())).thenReturn(5);
-        GameField field = new GameFieldImpl(mapParser, dice, getWeightedRandomGenerationOptionBag());
+        GameField field = new GameFieldImpl(mapParser, dice, SettingsHandler.getDefaults());
         PrinterFactory factory = new PrinterFactoryImpl();
 
         List<Game> games = new ArrayList<>();

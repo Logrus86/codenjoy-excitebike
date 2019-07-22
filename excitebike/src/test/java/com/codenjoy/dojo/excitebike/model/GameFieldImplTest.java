@@ -27,6 +27,7 @@ import com.codenjoy.dojo.excitebike.model.items.Inhibitor;
 import com.codenjoy.dojo.excitebike.model.items.LineChanger;
 import com.codenjoy.dojo.excitebike.model.items.Obstacle;
 import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
+import com.codenjoy.dojo.excitebike.services.SettingsHandler;
 import com.codenjoy.dojo.excitebike.services.parse.MapParser;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
@@ -38,7 +39,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Optional;
 
-import static com.codenjoy.dojo.excitebike.TestUtils.getWeightedRandomGenerationOptionBag;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
@@ -62,7 +62,7 @@ public class GameFieldImplTest {
     public void isFence__shouldReturnTrue__IfYEqualsZero() {
         //given
         int x = 1, y = 0;
-        gameField = new GameFieldImpl(mapParser, dice, getWeightedRandomGenerationOptionBag());
+        gameField = new GameFieldImpl(mapParser, dice, SettingsHandler.getDefaults());
 
         //when
         boolean result = gameField.isFence(x, y);
@@ -76,7 +76,7 @@ public class GameFieldImplTest {
         //given
         int x = 1, y = 2;
         when(mapParser.getYSize()).thenReturn(3);
-        gameField = new GameFieldImpl(mapParser, dice, getWeightedRandomGenerationOptionBag());
+        gameField = new GameFieldImpl(mapParser, dice, SettingsHandler.getDefaults());
 
         //when
         boolean result = gameField.isFence(x, y);
@@ -90,7 +90,7 @@ public class GameFieldImplTest {
         //given
         int x = 1, y = 1;
         when(mapParser.getYSize()).thenReturn(3);
-        gameField = new GameFieldImpl(mapParser, dice, getWeightedRandomGenerationOptionBag());
+        gameField = new GameFieldImpl(mapParser, dice, SettingsHandler.getDefaults());
 
         //when
         boolean result = gameField.isFence(x, y);
@@ -105,7 +105,7 @@ public class GameFieldImplTest {
         int x = 1, y = 1;
         Inhibitor inhibitor = new Inhibitor(x, y);
         when(mapParser.getInhibitors()).thenReturn(Collections.singletonList(inhibitor));
-        gameField = new GameFieldImpl(mapParser, dice, getWeightedRandomGenerationOptionBag());
+        gameField = new GameFieldImpl(mapParser, dice, SettingsHandler.getDefaults());
 
         //when
         boolean result = gameField.isInhibitor(x, y);
@@ -120,7 +120,7 @@ public class GameFieldImplTest {
         int x = 1, y = 1;
         Accelerator accelerator = new Accelerator(x, y);
         when(mapParser.getAccelerators()).thenReturn(Collections.singletonList(accelerator));
-        gameField = new GameFieldImpl(mapParser, dice, getWeightedRandomGenerationOptionBag());
+        gameField = new GameFieldImpl(mapParser, dice, SettingsHandler.getDefaults());
 
         //when
         boolean result = gameField.isAccelerator(x, y);
@@ -135,7 +135,7 @@ public class GameFieldImplTest {
         int x = 1, y = 1;
         Obstacle obstacle = new Obstacle(x, y);
         when(mapParser.getObstacles()).thenReturn(Collections.singletonList(obstacle));
-        gameField = new GameFieldImpl(mapParser, dice, getWeightedRandomGenerationOptionBag());
+        gameField = new GameFieldImpl(mapParser, dice, SettingsHandler.getDefaults());
 
         //when
         boolean result = gameField.isObstacle(x, y);
@@ -150,7 +150,7 @@ public class GameFieldImplTest {
         int x = 1, y = 1;
         LineChanger lineChanger = new LineChanger(x, y, true);
         when(mapParser.getLineUpChangers()).thenReturn(Collections.singletonList(lineChanger));
-        gameField = new GameFieldImpl(mapParser, dice, getWeightedRandomGenerationOptionBag());
+        gameField = new GameFieldImpl(mapParser, dice, SettingsHandler.getDefaults());
 
         //when
         boolean result = gameField.isUpLineChanger(x, y);
@@ -165,7 +165,7 @@ public class GameFieldImplTest {
         int x = 1, y = 1;
         LineChanger lineChanger = new LineChanger(x, y, false);
         when(mapParser.getLineDownChangers()).thenReturn(Collections.singletonList(lineChanger));
-        gameField = new GameFieldImpl(mapParser, dice, getWeightedRandomGenerationOptionBag());
+        gameField = new GameFieldImpl(mapParser, dice, SettingsHandler.getDefaults());
 
         //when
         boolean result = gameField.isDownLineChanger(x, y);
@@ -177,7 +177,7 @@ public class GameFieldImplTest {
     @Test
     public void getEnemyBike__shouldReturnEmptyOptional__ifThereIsOnlyThisBikeAtGivenCoordinates() {
         //given
-        gameField = new GameFieldImpl(mapParser, dice, getWeightedRandomGenerationOptionBag());
+        gameField = new GameFieldImpl(mapParser, dice, SettingsHandler.getDefaults());
         Player player = new Player(mock(EventListener.class));
         gameField.newGame(player);
 
@@ -191,7 +191,7 @@ public class GameFieldImplTest {
     @Test
     public void getEnemyBike__shouldReturnEmptyOptional__ifGivenPlayerIsNull() {
         //given
-        gameField = new GameFieldImpl(mapParser, dice, getWeightedRandomGenerationOptionBag());
+        gameField = new GameFieldImpl(mapParser, dice, SettingsHandler.getDefaults());
         Player player = new Player(mock(EventListener.class));
         gameField.newGame(player);
 
@@ -205,7 +205,7 @@ public class GameFieldImplTest {
     @Test
     public void getEnemyBike__shouldReturnOptionalWithEnemyBike__ifThereIsOneAtGivenCoordinates() {
         //given
-        gameField = new GameFieldImpl(mapParser, dice, getWeightedRandomGenerationOptionBag());
+        gameField = new GameFieldImpl(mapParser, dice, SettingsHandler.getDefaults());
         int x = 1;
         int y = 1;
         Bike thisBike = new Bike(x, y);
@@ -239,7 +239,7 @@ public class GameFieldImplTest {
         when(mapParser.getLineUpChangers()).thenReturn(new ArrayList<>(Collections.singletonList(upperLineChanger)));
         when(mapParser.getLineDownChangers()).thenReturn(new ArrayList<>(Collections.singletonList(lowerLineChanger)));
 
-        gameField = new GameFieldImpl(mapParser, dice, getWeightedRandomGenerationOptionBag());
+        gameField = new GameFieldImpl(mapParser, dice, SettingsHandler.getDefaults());
 
         when(dice.next(anyInt())).thenReturn(5);
 
@@ -267,7 +267,7 @@ public class GameFieldImplTest {
         when(mapParser.getXSize()).thenReturn(xSize);
         when(mapParser.getYSize()).thenReturn(ySize);
         when(dice.next(anyInt())).thenReturn(12, nonFenceElementOrdinal, nonFenceLaneNumber);
-        gameField = new GameFieldImpl(mapParser, dice, getWeightedRandomGenerationOptionBag());
+        gameField = new GameFieldImpl(mapParser, dice, SettingsHandler.getDefaults());
 
         //when
         gameField.tick();
@@ -281,7 +281,7 @@ public class GameFieldImplTest {
         //given
         Player player2 = new Player(mock(EventListener.class));
 
-        gameField = new GameFieldImpl(mapParser, dice, getWeightedRandomGenerationOptionBag());
+        gameField = new GameFieldImpl(mapParser, dice, SettingsHandler.getDefaults());
         gameField.newGame(new Player(mock(EventListener.class)));
         gameField.newGame(player2);
 
@@ -326,7 +326,7 @@ public class GameFieldImplTest {
         });
         Player player2 = new Player(mock(EventListener.class));
 
-        gameField = new GameFieldImpl(mapParser, dice, getWeightedRandomGenerationOptionBag());
+        gameField = new GameFieldImpl(mapParser, dice, SettingsHandler.getDefaults());
         gameField.newGame(new Player(mock(EventListener.class)));
         gameField.newGame(player2);
 
@@ -345,7 +345,7 @@ public class GameFieldImplTest {
     @Test
     public void getPlayerOfBike__shouldReturnNull__ifThereIsNoPlayerWithGivenBike() {
         //given
-        gameField = new GameFieldImpl(mapParser, dice, getWeightedRandomGenerationOptionBag());
+        gameField = new GameFieldImpl(mapParser, dice, SettingsHandler.getDefaults());
         Player player = new Player(mock(EventListener.class));
         gameField.newGame(player);
 
@@ -359,7 +359,7 @@ public class GameFieldImplTest {
     @Test
     public void getPlayerOfBike__shouldReturnOptionalWithEnemyBike__ifThereIsOneAtGivenCoordinates() {
         //given
-        gameField = new GameFieldImpl(mapParser, dice, getWeightedRandomGenerationOptionBag());
+        gameField = new GameFieldImpl(mapParser, dice, SettingsHandler.getDefaults());
         int x = 1;
         int y = 1;
         Bike givenBike = new Bike(x, y);

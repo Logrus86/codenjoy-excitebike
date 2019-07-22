@@ -32,8 +32,6 @@ import com.codenjoy.dojo.excitebike.model.Player;
 import com.codenjoy.dojo.excitebike.model.items.GameElementType;
 import com.codenjoy.dojo.excitebike.model.items.bike.BikeType;
 import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardElementType;
-import com.codenjoy.dojo.excitebike.services.generation.GenerationOption;
-import com.codenjoy.dojo.excitebike.services.generation.WeightedRandomBag;
 import com.codenjoy.dojo.excitebike.services.parse.MapParser;
 import com.codenjoy.dojo.excitebike.services.parse.MapParserImpl;
 import com.codenjoy.dojo.services.AbstractGameType;
@@ -44,12 +42,9 @@ import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.google.common.collect.ObjectArrays;
 
-import static com.codenjoy.dojo.excitebike.services.generation.GenerationOption.NOTHING;
-import static com.codenjoy.dojo.excitebike.services.generation.GenerationOption.OBSTACLE_CHAIN;
-import static com.codenjoy.dojo.excitebike.services.generation.GenerationOption.SINGLE_ELEMENT;
-import static com.codenjoy.dojo.excitebike.services.generation.GenerationOption.SPRINGBOARD;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
 public class GameRunner extends AbstractGameType implements GameType {
@@ -86,13 +81,12 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public GameField createGame(int levelNumber) {
-        //todo take from the settings:
-        WeightedRandomBag<GenerationOption> weightedRandomBag = new WeightedRandomBag<>();
-        weightedRandomBag.addEntry(NOTHING, 10);
-        weightedRandomBag.addEntry(SINGLE_ELEMENT, 5);
-        weightedRandomBag.addEntry(SPRINGBOARD, 2);
-        weightedRandomBag.addEntry(OBSTACLE_CHAIN, 2);
-        return new GameFieldImpl(mapParser, getDice(), weightedRandomBag);
+        return new GameFieldImpl(mapParser, getDice(), getSettings());
+    }
+
+    @Override
+    protected SettingsImpl createSettings() {
+        return SettingsHandler.getDefaults();
     }
 
     @Override

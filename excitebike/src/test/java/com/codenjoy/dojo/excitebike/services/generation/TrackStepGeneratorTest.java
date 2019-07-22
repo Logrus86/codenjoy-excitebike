@@ -55,7 +55,7 @@ public class TrackStepGeneratorTest {
         Dice dice = mock(Dice.class);
         int xSize = 10;
         int ySize = 10;
-        WeightedRandomBag weightedRandomBag = getWeightedRandomgenerationOptionBag();
+        WeightedRandomBag<GenerationOption> weightedRandomBag = getWeightedRandomgenerationOptionBag();
         TrackStepGenerator generator = new TrackStepGenerator(dice, xSize, ySize, weightedRandomBag);
         when(dice.next(19)).thenReturn(16);
         when(dice.next(SpringboardGenerator.SPRINGBOARD_TOP_MAX_WIDTH)).thenReturn(3);
@@ -80,7 +80,7 @@ public class TrackStepGeneratorTest {
         Dice dice = mock(Dice.class);
         int xSize = 10;
         int ySize = 10;
-        WeightedRandomBag weightedRandomBag = getWeightedRandomgenerationOptionBag();
+        WeightedRandomBag<GenerationOption> weightedRandomBag = getWeightedRandomgenerationOptionBag();
         TrackStepGenerator generator = new TrackStepGenerator(dice, xSize, ySize, weightedRandomBag);
         when(dice.next(19)).thenReturn(16, 12);
         when(dice.next(SpringboardGenerator.SPRINGBOARD_TOP_MAX_WIDTH)).thenReturn(3);
@@ -109,7 +109,7 @@ public class TrackStepGeneratorTest {
         Dice dice = mock(Dice.class);
         int xSize = 10;
         int ySize = 10;
-        WeightedRandomBag weightedRandomBag = getWeightedRandomgenerationOptionBag();
+        WeightedRandomBag<GenerationOption> weightedRandomBag = getWeightedRandomgenerationOptionBag();
         TrackStepGenerator generator = new TrackStepGenerator(dice, xSize, ySize, weightedRandomBag);
         when(dice.next(19)).thenReturn(5);
 
@@ -126,7 +126,7 @@ public class TrackStepGeneratorTest {
         Dice dice = mock(Dice.class);
         int xSize = 10;
         int ySize = 10;
-        WeightedRandomBag weightedRandomBag = getWeightedRandomgenerationOptionBag();
+        WeightedRandomBag<GenerationOption> weightedRandomBag = getWeightedRandomgenerationOptionBag();
         TrackStepGenerator generator = new TrackStepGenerator(dice, xSize, ySize, weightedRandomBag);
         when(dice.next(19)).thenReturn(12);
 
@@ -145,7 +145,7 @@ public class TrackStepGeneratorTest {
         Dice dice = mock(Dice.class);
         int xSize = 10;
         int ySize = 10;
-        WeightedRandomBag weightedRandomBag = getWeightedRandomgenerationOptionBag();
+        WeightedRandomBag<GenerationOption> weightedRandomBag = getWeightedRandomgenerationOptionBag();
         TrackStepGenerator generator = new TrackStepGenerator(dice, xSize, ySize, weightedRandomBag);
         when(dice.next(19)).thenReturn(18);
 
@@ -157,8 +157,8 @@ public class TrackStepGeneratorTest {
         assertThat(result.get(GameElementType.OBSTACLE).size(), greaterThan(0));
     }
 
-    private WeightedRandomBag getWeightedRandomgenerationOptionBag() {
-        WeightedRandomBag weightedRandomBag = new WeightedRandomBag();
+    private WeightedRandomBag<GenerationOption> getWeightedRandomgenerationOptionBag() {
+        WeightedRandomBag<GenerationOption> weightedRandomBag = new WeightedRandomBag<>();
         weightedRandomBag.addEntry(NOTHING, 10);
         weightedRandomBag.addEntry(SINGLE_ELEMENT, 5);
         weightedRandomBag.addEntry(SPRINGBOARD, 2);

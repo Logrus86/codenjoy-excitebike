@@ -28,6 +28,7 @@ import com.codenjoy.dojo.excitebike.model.items.Shiftable;
 import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
 import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardElementType;
 import com.codenjoy.dojo.excitebike.services.Events;
+import com.codenjoy.dojo.excitebike.services.SettingsHandler;
 import com.codenjoy.dojo.excitebike.services.generation.GenerationOption;
 import com.codenjoy.dojo.excitebike.services.generation.TrackStepGenerator;
 import com.codenjoy.dojo.excitebike.services.generation.WeightedRandomBag;
@@ -38,6 +39,7 @@ import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.CharElements;
+import com.codenjoy.dojo.services.settings.Settings;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -71,7 +73,7 @@ public class GameFieldImpl implements GameField {
     private final List<Fence> fences;
     private final TrackStepGenerator trackStepGenerator;
 
-    public GameFieldImpl(MapParser mapParser, Dice dice, WeightedRandomBag<GenerationOption> weightedRandomBag) {
+    public GameFieldImpl(MapParser mapParser, Dice dice, Settings settings) {
         this.mapParser = mapParser;
 
         fences = mapParser.getFences();
@@ -91,6 +93,7 @@ public class GameFieldImpl implements GameField {
         allShiftableElements.put(SpringboardElementType.SPRINGBOARD_RIGHT_DOWN, new ArrayList<>(mapParser.getSpringboardRightDownElements()));
         allShiftableElements.put(SpringboardElementType.SPRINGBOARD_TOP, new ArrayList<>(mapParser.getSpringboardNoneElements()));
 
+        WeightedRandomBag<GenerationOption> weightedRandomBag = SettingsHandler.getWeightedRandomBag(settings);
         this.trackStepGenerator = new TrackStepGenerator(dice, mapParser.getXSize(), mapParser.getYSize(), weightedRandomBag);
     }
 

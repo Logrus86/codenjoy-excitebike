@@ -24,6 +24,7 @@ package com.codenjoy.dojo.excitebike.model;
 
 
 import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
+import com.codenjoy.dojo.excitebike.services.SettingsHandler;
 import com.codenjoy.dojo.excitebike.services.parse.MapParserImpl;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
@@ -31,7 +32,6 @@ import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.codenjoy.dojo.excitebike.TestUtils.getWeightedRandomGenerationOptionBag;
 import static com.codenjoy.dojo.excitebike.TestUtils.parseBikes;
 import static com.codenjoy.dojo.excitebike.TestUtils.printField;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -54,7 +54,7 @@ public class GameFieldImplSystemTest {
 
     private void init(String board) {
         Bike bike = parseBikes(board).get(0);
-        game = new GameFieldImpl(new MapParserImpl(board), dice, getWeightedRandomGenerationOptionBag());
+        game = new GameFieldImpl(new MapParserImpl(board), dice, SettingsHandler.getDefaults());
         player = new Player(mock(EventListener.class));
         game.newGame(player);
         player.setHero(bike);
@@ -92,7 +92,7 @@ public class GameFieldImplSystemTest {
                 " ▲ < " +
                 "■■■■■";
         init(board);
-        when(dice.next(19)).thenReturn(12);
+        when(dice.next(20)).thenReturn(12);
         when(dice.next(5)).thenReturn(1);
         when(dice.next(3)).thenReturn(1);
 
@@ -1729,7 +1729,7 @@ public class GameFieldImplSystemTest {
                 "B    " +
                 "■■■■■";
         init(board);
-        when(dice.next(19)).thenReturn(12);
+        when(dice.next(20)).thenReturn(12);
         when(dice.next(5)).thenReturn(0);
         when(dice.next(3)).thenReturn(2);
 
@@ -2550,7 +2550,7 @@ public class GameFieldImplSystemTest {
                 "            " +
                 "■■■■■■■■■■■■";
         init(board);
-        when(dice.next(19)).thenReturn(18);
+        when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(0);
         when(dice.next(3)).thenReturn(0);
         when(dice.next(10)).thenReturn(9, 7, 8, 6, 4);
@@ -2591,7 +2591,7 @@ public class GameFieldImplSystemTest {
                 "■■■■■■■■■■■■";
         init(board);
         when(dice.next(3)).thenReturn(1);
-        when(dice.next(19)).thenReturn(18);
+        when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(1);
         when(dice.next(10)).thenReturn(9);
         when(dice.next(5)).thenReturn(0);
@@ -2632,7 +2632,7 @@ public class GameFieldImplSystemTest {
                 "■■■■■■■■■■■■";
         init(board);
         when(dice.next(3)).thenReturn(1);
-        when(dice.next(19)).thenReturn(18);
+        when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(1);
         when(dice.next(10)).thenReturn(9);
         when(dice.next(5)).thenReturn(0);
@@ -2674,7 +2674,7 @@ public class GameFieldImplSystemTest {
                 "■■■■■■■■■■■■";
         init(board);
         when(dice.next(3)).thenReturn(1);
-        when(dice.next(19)).thenReturn(18);
+        when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(1);
         when(dice.next(10)).thenReturn(9);
         when(dice.next(5)).thenReturn(0);
@@ -2716,7 +2716,7 @@ public class GameFieldImplSystemTest {
                 "■■■■■■■■■■■■";
         init(board);
         when(dice.next(3)).thenReturn(1);
-        when(dice.next(19)).thenReturn(18);
+        when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(1);
         when(dice.next(10)).thenReturn(9);
         when(dice.next(5)).thenReturn(0);
@@ -2758,7 +2758,7 @@ public class GameFieldImplSystemTest {
                 "■■■■■■■■■■■■";
         init(board);
         when(dice.next(3)).thenReturn(1);
-        when(dice.next(19)).thenReturn(18);
+        when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(1);
         when(dice.next(10)).thenReturn(9);
         when(dice.next(5)).thenReturn(0);
@@ -2800,7 +2800,7 @@ public class GameFieldImplSystemTest {
                 "■■■■■■■■■■■■";
         init(board);
         when(dice.next(3)).thenReturn(1);
-        when(dice.next(19)).thenReturn(18);
+        when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(1);
         when(dice.next(10)).thenReturn(9);
         when(dice.next(5)).thenReturn(0);
@@ -2842,7 +2842,7 @@ public class GameFieldImplSystemTest {
                 "■■■■■■■■■■■■";
         init(board);
         when(dice.next(3)).thenReturn(1);
-        when(dice.next(19)).thenReturn(18);
+        when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(1);
         when(dice.next(10)).thenReturn(9);
         when(dice.next(5)).thenReturn(0);
@@ -2884,7 +2884,7 @@ public class GameFieldImplSystemTest {
                 "■■■■■■■■■■■■";
         init(board);
         when(dice.next(3)).thenReturn(1);
-        when(dice.next(19)).thenReturn(18);
+        when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(1);
         when(dice.next(10)).thenReturn(9);
         when(dice.next(5)).thenReturn(0);
@@ -2926,7 +2926,7 @@ public class GameFieldImplSystemTest {
                 "■■■■■■■■■■■■";
         init(board);
         when(dice.next(3)).thenReturn(1);
-        when(dice.next(19)).thenReturn(18);
+        when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(1);
         when(dice.next(10)).thenReturn(9);
         when(dice.next(5)).thenReturn(0);
@@ -2968,7 +2968,7 @@ public class GameFieldImplSystemTest {
                 "■■■■■■■■■■■■";
         init(board);
         when(dice.next(3)).thenReturn(1);
-        when(dice.next(19)).thenReturn(18);
+        when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(1);
         when(dice.next(10)).thenReturn(9);
         when(dice.next(5)).thenReturn(0);
@@ -3010,7 +3010,7 @@ public class GameFieldImplSystemTest {
                 "■■■■■■■■■■■■";
         init(board);
         when(dice.next(3)).thenReturn(1);
-        when(dice.next(19)).thenReturn(18);
+        when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(1);
         when(dice.next(10)).thenReturn(9);
         when(dice.next(5)).thenReturn(0);
@@ -3052,7 +3052,7 @@ public class GameFieldImplSystemTest {
                 "■■■■■■■■■■■■";
         init(board);
         when(dice.next(3)).thenReturn(2);
-        when(dice.next(19)).thenReturn(18);
+        when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(2);
         when(dice.next(10)).thenReturn(9);
         when(dice.next(5)).thenReturn(0);
@@ -3094,7 +3094,7 @@ public class GameFieldImplSystemTest {
                 "■■■■■■■■■■■■";
         init(board);
         when(dice.next(3)).thenReturn(2);
-        when(dice.next(19)).thenReturn(18);
+        when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(2);
         when(dice.next(10)).thenReturn(9);
         when(dice.next(5)).thenReturn(0);
@@ -3136,7 +3136,7 @@ public class GameFieldImplSystemTest {
                 "■■■■■■■■■■■■";
         init(board);
         when(dice.next(3)).thenReturn(2);
-        when(dice.next(19)).thenReturn(18);
+        when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(2);
         when(dice.next(10)).thenReturn(9);
         when(dice.next(5)).thenReturn(0);
@@ -3178,7 +3178,7 @@ public class GameFieldImplSystemTest {
                 "■■■■■■■■■■■■";
         init(board);
         when(dice.next(3)).thenReturn(2);
-        when(dice.next(19)).thenReturn(18);
+        when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(2);
         when(dice.next(10)).thenReturn(9);
         when(dice.next(5)).thenReturn(0);
@@ -3220,7 +3220,7 @@ public class GameFieldImplSystemTest {
                 "■■■■■■■■■■■■";
         init(board);
         when(dice.next(3)).thenReturn(2);
-        when(dice.next(19)).thenReturn(18);
+        when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(2);
         when(dice.next(10)).thenReturn(9);
         when(dice.next(5)).thenReturn(0);
@@ -3262,7 +3262,7 @@ public class GameFieldImplSystemTest {
                 "■■■■■■■■■■■■";
         init(board);
         when(dice.next(3)).thenReturn(2);
-        when(dice.next(19)).thenReturn(18);
+        when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(2);
         when(dice.next(10)).thenReturn(9);
         when(dice.next(5)).thenReturn(0);
@@ -3304,7 +3304,7 @@ public class GameFieldImplSystemTest {
                 "■■■■■■■■■■■■";
         init(board);
         when(dice.next(3)).thenReturn(2);
-        when(dice.next(19)).thenReturn(18);
+        when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(2);
         when(dice.next(10)).thenReturn(9);
         when(dice.next(5)).thenReturn(0);
@@ -3346,7 +3346,7 @@ public class GameFieldImplSystemTest {
                 "■■■■■■■■■■■■";
         init(board);
         when(dice.next(3)).thenReturn(2);
-        when(dice.next(19)).thenReturn(18);
+        when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(2);
         when(dice.next(10)).thenReturn(9);
         when(dice.next(5)).thenReturn(0);
@@ -3388,7 +3388,7 @@ public class GameFieldImplSystemTest {
                 "■■■■■■■■■■■■";
         init(board);
         when(dice.next(3)).thenReturn(2);
-        when(dice.next(19)).thenReturn(18);
+        when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(2);
         when(dice.next(10)).thenReturn(9);
         when(dice.next(5)).thenReturn(0);
@@ -3430,7 +3430,7 @@ public class GameFieldImplSystemTest {
                 "■■■■■■■■■■■■";
         init(board);
         when(dice.next(3)).thenReturn(2);
-        when(dice.next(19)).thenReturn(18);
+        when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(2);
         when(dice.next(10)).thenReturn(9);
         when(dice.next(5)).thenReturn(0);
@@ -3472,7 +3472,7 @@ public class GameFieldImplSystemTest {
                 "■■■■■■■■■■■■";
         init(board);
         when(dice.next(3)).thenReturn(1);
-        when(dice.next(19)).thenReturn(18);
+        when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(1);
         when(dice.next(10)).thenReturn(3);
         when(dice.next(5)).thenReturn(0);
@@ -3514,7 +3514,7 @@ public class GameFieldImplSystemTest {
                 "■■■■■■■■■■■■";
         init(board);
         when(dice.next(3)).thenReturn(2);
-        when(dice.next(19)).thenReturn(18);
+        when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(2);
         when(dice.next(10)).thenReturn(3);
         when(dice.next(5)).thenReturn(0);

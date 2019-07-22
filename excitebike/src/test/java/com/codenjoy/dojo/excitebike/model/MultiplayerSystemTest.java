@@ -28,6 +28,7 @@ import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.excitebike.client.Board;
 import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
 import com.codenjoy.dojo.excitebike.services.GameRunner;
+import com.codenjoy.dojo.excitebike.services.SettingsHandler;
 import com.codenjoy.dojo.excitebike.services.parse.MapParser;
 import com.codenjoy.dojo.excitebike.services.parse.MapParserImpl;
 import com.codenjoy.dojo.services.Dice;
@@ -42,7 +43,6 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.LinkedList;
 
-import static com.codenjoy.dojo.excitebike.TestUtils.getWeightedRandomGenerationOptionBag;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.anyInt;
@@ -67,7 +67,7 @@ public class MultiplayerSystemTest {
                 "■■■■■■■");
 
         dice = mock(Dice.class);
-        field = new GameFieldImpl(mapParser, dice, getWeightedRandomGenerationOptionBag());
+        field = new GameFieldImpl(mapParser, dice, SettingsHandler.getDefaults());
         PrinterFactory factory = new PrinterFactoryImpl();
 
         game1 = new Single(new Player(mock(EventListener.class)), factory);
