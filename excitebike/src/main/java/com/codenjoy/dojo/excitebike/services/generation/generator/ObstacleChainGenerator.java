@@ -43,7 +43,7 @@ import static com.codenjoy.dojo.excitebike.services.generation.generator.Obstacl
  */
 public class ObstacleChainGenerator implements Generator {
 
-    Map<GameElementType, List<Shiftable>> elements = new EnumMap<>(GameElementType.class);
+    private Map<GameElementType, List<Shiftable>> elements = new EnumMap<>(GameElementType.class);
     private final Dice dice;
     private final int x0;
     private final int ySize;
