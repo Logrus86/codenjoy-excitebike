@@ -67,7 +67,7 @@ public class MultiplayerSystemTest {
                 "■■■■■■■");
 
         dice = mock(Dice.class);
-        field = new GameFieldImpl(mapParser, dice, SettingsHandler.getDefaults());
+        field = new GameFieldImpl(mapParser, dice, new SettingsHandler());
         PrinterFactory factory = new PrinterFactoryImpl();
 
         game1 = new Single(new Player(mock(EventListener.class)), factory);

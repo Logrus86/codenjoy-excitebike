@@ -54,7 +54,7 @@ public class GameFieldImplSystemTest {
 
     private void init(String board) {
         Bike bike = parseBikes(board).get(0);
-        game = new GameFieldImpl(new MapParserImpl(board), dice, SettingsHandler.getDefaults());
+        game = new GameFieldImpl(new MapParserImpl(board), dice, new SettingsHandler());
         player = new Player(mock(EventListener.class));
         game.newGame(player);
         player.setHero(bike);

@@ -51,8 +51,8 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     //TODO add to settings TASK - 34-admin-functional-and-settings
     public static final int FIELD_HEIGHT = 12;
-
     private final MapParser mapParser;
+    private SettingsHandler settingsHandler;
 
     public GameRunner() {
         mapParser = new MapParserImpl(getMap());
@@ -76,17 +76,18 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public PlayerScores getPlayerScores(Object score) {
-        return new Scores((Integer) score, settings);
+        return new Scores((Integer) score, settingsHandler);
     }
 
     @Override
     public GameField createGame(int levelNumber) {
-        return new GameFieldImpl(mapParser, getDice(), getSettings());
+        return new GameFieldImpl(mapParser, getDice(), settingsHandler);
     }
 
     @Override
     protected SettingsImpl createSettings() {
-        return SettingsHandler.getDefaults();
+        settingsHandler = new SettingsHandler();
+        return settingsHandler.getSettings();
     }
 
     @Override

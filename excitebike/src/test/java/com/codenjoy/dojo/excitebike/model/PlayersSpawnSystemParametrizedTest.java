@@ -178,7 +178,7 @@ public class PlayersSpawnSystemParametrizedTest {
 
         Dice dice = mock(Dice.class);
         when(dice.next(anyInt())).thenReturn(5);
-        GameField field = new GameFieldImpl(mapParser, dice, SettingsHandler.getDefaults());
+        GameField field = new GameFieldImpl(mapParser, dice, new SettingsHandler());
         PrinterFactory factory = new PrinterFactoryImpl();
 
         List<Game> games = new ArrayList<>();

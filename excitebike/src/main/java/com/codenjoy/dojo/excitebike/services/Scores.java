@@ -24,18 +24,16 @@ package com.codenjoy.dojo.excitebike.services;
 
 
 import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
 
 public class Scores implements PlayerScores {
 
-    private final Parameter<Integer> winScore;
+    private final SettingsHandler settingsHandler;
 
     private volatile int score;
 
-    public Scores(int startScore, Settings settings) {
+    public Scores(int startScore, SettingsHandler settingsHandler) {
         this.score = startScore;
-        winScore = settings.addEditBox("Win score").type(Integer.class).def(1);
+        this.settingsHandler = settingsHandler;
     }
 
     @Override
@@ -51,7 +49,7 @@ public class Scores implements PlayerScores {
     @Override
     public void event(Object event) {
         if (event.equals(Events.WIN)) {
-            score += winScore.getValue();
+            score += settingsHandler.getWinScore();
         }
         score = Math.max(0, score);
     }

@@ -24,7 +24,6 @@ package com.codenjoy.dojo.excitebike.services;
 
 import com.codenjoy.dojo.excitebike.services.generation.GenerationOption;
 import com.codenjoy.dojo.excitebike.services.generation.WeightedRandomBag;
-import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 
 import static com.codenjoy.dojo.excitebike.services.generation.GenerationOption.NOTHING;
@@ -41,26 +40,36 @@ public class SettingsHandler {
     private static final String GENERATION_WEIGHT_SINGLE_ELEMENT = "Spawn weight: single element";
     private static final String GENERATION_WEIGHT_SPRINGBOARD = "Spawn weight: springboard";
     private static final String GENERATION_WEIGHT_OBSTACLE_CHAIN = "Spawn weight: obstacle chain";
+    private static final String WIN_SCORE = "Win score";
     private static final int DEFAULT_GENERATION_WEIGHT_NOTHING = 10;
     private static final int DEFAULT_GENERATION_WEIGHT_SINGLE_ELEMENT = 5;
     private static final int DEFAULT_GENERATION_WEIGHT_SPRINGBOARD = 2;
     private static final int DEFAULT_GENERATION_WEIGHT_OBSTACLE_CHAIN = 2;
+    private static final int DEFAULT_WIN_SCORE = 1;
+    private final SettingsImpl settings = new SettingsImpl();
 
-    public static SettingsImpl getDefaults() {
-        SettingsImpl settings = new SettingsImpl();
+    public SettingsHandler() {
         settings.addEditBox(GENERATION_WEIGHT_NOTHING).type(Integer.class).def(DEFAULT_GENERATION_WEIGHT_NOTHING);
         settings.addEditBox(GENERATION_WEIGHT_SINGLE_ELEMENT).type(Integer.class).def(DEFAULT_GENERATION_WEIGHT_SINGLE_ELEMENT);
         settings.addEditBox(GENERATION_WEIGHT_SPRINGBOARD).type(Integer.class).def(DEFAULT_GENERATION_WEIGHT_SPRINGBOARD);
         settings.addEditBox(GENERATION_WEIGHT_OBSTACLE_CHAIN).type(Integer.class).def(DEFAULT_GENERATION_WEIGHT_OBSTACLE_CHAIN);
+        settings.addEditBox(WIN_SCORE).type(Integer.class).def(DEFAULT_WIN_SCORE);
+    }
+
+    public SettingsImpl getSettings() {
         return settings;
     }
 
-    public static WeightedRandomBag<GenerationOption> getWeightedRandomBag(Settings settings) {
+    public WeightedRandomBag<GenerationOption> getWeightedRandomBag() {
         WeightedRandomBag<GenerationOption> weightedRandomBag = new WeightedRandomBag<>();
         weightedRandomBag.addEntry(NOTHING, (Integer) settings.getParameter(GENERATION_WEIGHT_NOTHING).getValue());
         weightedRandomBag.addEntry(SINGLE_ELEMENT, (Integer) settings.getParameter(GENERATION_WEIGHT_SINGLE_ELEMENT).getValue());
         weightedRandomBag.addEntry(SPRINGBOARD, (Integer) settings.getParameter(GENERATION_WEIGHT_SPRINGBOARD).getValue());
         weightedRandomBag.addEntry(OBSTACLE_CHAIN, (Integer) settings.getParameter(GENERATION_WEIGHT_OBSTACLE_CHAIN).getValue());
         return weightedRandomBag;
+    }
+
+    public Integer getWinScore() {
+        return (Integer) settings.getParameter(WIN_SCORE).getValue();
     }
 }

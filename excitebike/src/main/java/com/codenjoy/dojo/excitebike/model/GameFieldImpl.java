@@ -39,7 +39,6 @@ import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.CharElements;
-import com.codenjoy.dojo.services.settings.Settings;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -72,11 +71,11 @@ public class GameFieldImpl implements GameField {
     private final List<Player> players = new LinkedList<>();
     private final List<Fence> fences;
     private final TrackStepGenerator trackStepGenerator;
-    private final Settings settings;
+    private final SettingsHandler settingsHandler;
 
-    public GameFieldImpl(MapParser mapParser, Dice dice, Settings settings) {
+    public GameFieldImpl(MapParser mapParser, Dice dice, SettingsHandler settingsHandler) {
         this.mapParser = mapParser;
-        this.settings = settings;
+        this.settingsHandler = settingsHandler;
 
         fences = mapParser.getFences();
 
@@ -307,7 +306,7 @@ public class GameFieldImpl implements GameField {
     }
 
     private void generateNewTrackStep() {
-        WeightedRandomBag<GenerationOption> weightedRandomBag = SettingsHandler.getWeightedRandomBag(settings);
+        WeightedRandomBag<GenerationOption> weightedRandomBag = settingsHandler.getWeightedRandomBag();
         Map<? extends CharElements, List<Shiftable>> generated = trackStepGenerator.generate(weightedRandomBag);
         if (generated != null) {
             generated.forEach((key, elements) -> allShiftableElements.merge(key, elements, (currentElements, newElements) -> {
