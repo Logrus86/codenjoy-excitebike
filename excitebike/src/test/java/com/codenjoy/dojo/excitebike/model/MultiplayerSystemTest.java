@@ -872,7 +872,7 @@ public class MultiplayerSystemTest {
     }
 
     @Test
-    public void twoBikesBehindObstacleTick1__shouldCrushEnemyBikeAtObstacle() {
+    public void twoBikesBehindObstacleTick2__shouldCrushEnemyBikeAtObstacle() {
         //given
         init();
         game3.close();
