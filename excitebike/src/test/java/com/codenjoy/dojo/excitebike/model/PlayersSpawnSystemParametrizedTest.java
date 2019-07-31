@@ -64,7 +64,7 @@ public class PlayersSpawnSystemParametrizedTest {
     @Parameterized.Parameters(name = "{0}")
     public static Collection<Object> data() {
         return Lists.newArrayList(
-                /*new Object[]{"1. shouldAddThreeBikesToFirstColumn",
+                new Object[]{"1. shouldAddThreeBikesToFirstColumn",
                         3,
                         "■■■■■■■" +
                                 "       " +
@@ -182,7 +182,7 @@ public class PlayersSpawnSystemParametrizedTest {
                                 "/════\\ \n" +
                                 "M////╝ \n" +
                                 "■■■■■■■\n"
-                },*/
+                },
                 new Object[]{"8. shouldAddThreeBikesInFirstColumn__atSpringboardTop",
                         3,
                         "════╗■■" +
@@ -200,7 +200,7 @@ public class PlayersSpawnSystemParametrizedTest {
                                 "////╝  \n" +
                                 "■■■■■■■\n"
                 },
-                /*new Object[]{"9. shouldAddThreeBikesInFirstColumn__atSpringboardEnding",
+                new Object[]{"9. shouldAddThreeBikesInFirstColumn__atSpringboardEnding",
                         3,
                         "╗■■■■■■" +
                                 "\\      " +
@@ -255,7 +255,7 @@ public class PlayersSpawnSystemParametrizedTest {
                                 "ḂḂḂḂḂ\n" +
                                 "BḂḂḂḂ\n" +
                                 "■■■■■\n"
-                },*/
+                },
                 new Object[]{"13. shouldAddManyBikes__coveringWholeSpringboardAndLinesBeforeAndAfterInChessOrder",
                         18,
                         "■╔═══╗■" +
