@@ -49,8 +49,11 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
 public class GameRunner extends AbstractGameType implements GameType {
 
+    //-----------------------------------
+    // Don't forget to adjust excitebike.js if you change those x/y parameters:
     private static final int X_SIZE = 30;
     private static final int Y_SIZE = 12;
+    //-----------------------------------
     private final MapParser mapParser;
     private SettingsHandler settingsHandler;
 
