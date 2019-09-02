@@ -20,27 +20,29 @@
  * #L%
  */
 
+// should by synced with the GameRunner#Y_SIZE constant
+var ySize = 12;
+
 window.onload = function(){
     let initTribune = function(canvasElement) {
         let tribuneDiv = document.createElement('div');
         tribuneDiv.id = 'tribune';
-        tribuneDiv.style.height = canvasElement.height / 6 + 'px';
         canvasElement.parentNode.insertBefore(tribuneDiv, canvasElement);
     }
-    
-    let cutOffHalfOfCanvas = function(canvasElement) {
-        var halfCanvasHeight = (canvasElement.height / 2).toFixed(0);
-        canvasElement.style.bottom = halfCanvasHeight + 'px';
+
+    let hideEmptyCanvasPart = function(canvasElement) {
+        var xSize = game.boardSize;
+        canvasElement.style.bottom = xSize * 50 - ySize * 50 + 'px';
+        canvasElement.style.height = xSize * 50 + 'px';
 
         var canvasWrapper = document.createElement('div');
         canvasWrapper.id = 'canvasWrapper';
-        canvasWrapper.height = halfCanvasHeight;
-        canvasWrapper.style.height = halfCanvasHeight + 'px';
+        canvasWrapper.style.height = ySize * 50 + 'px';
 
         canvasElement.parentNode.insertBefore(canvasWrapper, canvasElement);
         canvasWrapper.appendChild(canvasElement);
     }
-            
+
     let injectCssWithUiMods = function() {
         let divCanvas = document.getElementsByClassName('player-canvas');
         if(divCanvas!=null && document.getElementsByTagName('canvas').length>1){
@@ -52,7 +54,7 @@ window.onload = function(){
                      "beforeend",
                      "<link rel=\"stylesheet\" href=\""+document.location.origin+game.contextPath+"/resources/css/"+game.gameName+".css"+"\" />");
             initTribune(canvasElement);
-            cutOffHalfOfCanvas(canvasElement);
+            hideEmptyCanvasPart(canvasElement);
         } else {
             setTimeout(injectCssWithUiMods, 100);
         }
