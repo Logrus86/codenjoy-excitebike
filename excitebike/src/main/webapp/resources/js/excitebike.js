@@ -21,7 +21,27 @@
  */
 
 window.onload = function(){
-    let initTribune = function() {
+    let initTribune = function(canvasElement) {
+        let tribuneDiv = document.createElement('div');
+        tribuneDiv.id = 'tribune';
+        tribuneDiv.style.height = canvasElement.height / 6 + 'px';
+        canvasElement.parentNode.insertBefore(tribuneDiv, canvasElement);
+    }
+    
+    let cutOffHalfOfCanvas = function(canvasElement) {
+        var halfCanvasHeight = (canvasElement.height / 2).toFixed(0);
+        canvasElement.style.bottom = halfCanvasHeight + 'px';
+
+        var canvasWrapper = document.createElement('div');
+        canvasWrapper.id = 'canvasWrapper';
+        canvasWrapper.height = halfCanvasHeight;
+        canvasWrapper.style.height = halfCanvasHeight + 'px';
+
+        canvasElement.parentNode.insertBefore(canvasWrapper, canvasElement);
+        canvasWrapper.appendChild(canvasElement);
+    }
+            
+    let injectCssWithUiMods = function() {
         let divCanvas = document.getElementsByClassName('player-canvas');
         if(divCanvas!=null && document.getElementsByTagName('canvas').length>1){
             let canvasElement = document.getElementById(game.playerName);
@@ -31,13 +51,11 @@ window.onload = function(){
             document.getElementsByTagName("head")[0].insertAdjacentHTML(
                      "beforeend",
                      "<link rel=\"stylesheet\" href=\""+document.location.origin+game.contextPath+"/resources/css/"+game.gameName+".css"+"\" />");
-            let tribuneDiv = document.createElement('div');
-            tribuneDiv.id = 'tribune';
-            tribuneDiv.style.height = canvasElement.height/3+'px';
-            canvasElement.parentNode.insertBefore(tribuneDiv, canvasElement);
+            initTribune(canvasElement);
+            cutOffHalfOfCanvas(canvasElement);
         } else {
-        setTimeout(initTribune, 100);
+            setTimeout(injectCssWithUiMods, 100);
         }
     }
-    initTribune();
+    injectCssWithUiMods();
 }
