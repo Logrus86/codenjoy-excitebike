@@ -232,6 +232,7 @@ public class GameFieldImpl implements GameField {
     private boolean isFree(Point point) {
         Point nextPoint = new PointImpl(point.getX()+1, point.getY());
         return !getAliveBikes().contains(point)
+                && !fences.contains(point)
                 && !fences.contains(nextPoint)
                 && !allShiftableElements.get(OBSTACLE).contains(point)
                 && !allShiftableElements.get(OBSTACLE).contains(nextPoint)
