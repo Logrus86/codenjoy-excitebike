@@ -36,6 +36,7 @@ import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -75,7 +76,7 @@ public class TestUtils {
     }
 
     public static Player getPlayer(Bike bike) {
-        Player player = new Player(mock(EventListener.class));
+        Player player = new Player(mock(EventListener.class), "player" + new Random().nextInt());
         player.setHero(bike);
         return player;
     }

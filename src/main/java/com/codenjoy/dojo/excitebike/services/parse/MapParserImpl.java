@@ -64,14 +64,6 @@ public class MapParserImpl implements MapParser {
     }
 
     @Override
-    public List<Bike> getFallenBikes() {
-        return parseAndConvertElements(Bike::new,
-                Arrays.stream(BikeType.values())
-                        .filter(e -> e.name().contains(Bike.FALLEN_BIKE_SUFFIX))
-                        .toArray(BikeType[]::new));
-    }
-
-    @Override
     public List<Accelerator> getAccelerators() {
         return parseAndConvertElements(Accelerator::new, GameElementType.ACCELERATOR);
     }

@@ -179,7 +179,7 @@ public class GameFieldImplTest {
     public void getEnemyBike__shouldReturnEmptyOptional__ifThereIsOnlyThisBikeAtGivenCoordinates() {
         //given
         gameField = new GameFieldImpl(mapParser, dice, new SettingsHandler());
-        Player player = new Player(mock(EventListener.class));
+        Player player = new Player(mock(EventListener.class), "player1");
         gameField.newGame(player);
 
         //when
@@ -193,7 +193,7 @@ public class GameFieldImplTest {
     public void getEnemyBike__shouldReturnEmptyOptional__ifGivenPlayerIsNull() {
         //given
         gameField = new GameFieldImpl(mapParser, dice, new SettingsHandler());
-        Player player = new Player(mock(EventListener.class));
+        Player player = new Player(mock(EventListener.class), "player1");
         gameField.newGame(player);
 
         //when
@@ -281,7 +281,7 @@ public class GameFieldImplTest {
     public void getPlayerOfBike__shouldReturnNull__ifThereIsNoPlayerWithGivenBike() {
         //given
         gameField = new GameFieldImpl(mapParser, dice, new SettingsHandler());
-        Player player = new Player(mock(EventListener.class));
+        Player player = new Player(mock(EventListener.class), "player1");
         gameField.newGame(player);
 
         //when

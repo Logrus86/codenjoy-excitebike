@@ -38,8 +38,6 @@ public interface MapParser {
 
     int getYSize();
 
-    List<Bike> getFallenBikes();
-
     List<Accelerator> getAccelerators();
 
     List<Fence> getFences();

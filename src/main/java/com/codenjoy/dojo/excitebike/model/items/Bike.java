@@ -33,6 +33,7 @@ import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
 import java.util.Objects;
+import java.util.Random;
 
 import static com.codenjoy.dojo.excitebike.model.elements.BikeType.BIKE;
 import static com.codenjoy.dojo.excitebike.model.elements.BikeType.BIKE_AT_ACCELERATOR;
@@ -66,6 +67,7 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
     public static final String AT_LINE_CHANGER_UP_SUFFIX = "_AT_LINE_CHANGER_UP";
     public static final String AT_LINE_CHANGER_DOWN_SUFFIX = "_AT_LINE_CHANGER_DOWN";
 
+    private final long id = new Random().nextLong();
     private Direction command;
     private Movement movement = new Movement();
     private BikeType type = BIKE;
@@ -83,6 +85,10 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
 
     public Bike(int x, int y) {
         super(x, y);
+    }
+
+    public long getId() {
+        return id;
     }
 
     @Override
@@ -447,30 +453,20 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
         Bike bike = (Bike) o;
-        return ticked == bike.ticked &&
-                accelerated == bike.accelerated &&
-                inhibited == bike.inhibited &&
-                interacted == bike.interacted &&
-                atSpringboard == bike.atSpringboard &&
-                adjusted == bike.adjusted &&
-                movementLock == bike.movementLock &&
-                command == bike.command &&
-                Objects.equals(movement, bike.movement) &&
-                type == bike.type;
+        return id == bike.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), command, movement, type, ticked, accelerated, inhibited, interacted,
-                atSpringboard, adjusted, movementLock);
+        return Objects.hash(id);
     }
 
     @Override
     public String toString() {
         return "Bike{" +
-                "command=" + command +
+                "id=" + id +
+                ", command=" + command +
                 ", movement=" + movement +
                 ", type=" + type +
                 ", ticked=" + ticked +
