@@ -254,8 +254,8 @@ public class GameFieldImpl implements GameField {
     public void newGame(Player player) {
         if (!players.contains(player)) {
             players.add(player);
+            player.newHero(this);
         }
-        player.newHero(this);
     }
 
     @Override
