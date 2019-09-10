@@ -27,6 +27,7 @@ import com.codenjoy.dojo.excitebike.model.items.Bike;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
 import java.util.Random;
@@ -38,7 +39,7 @@ public class Player extends GamePlayer<Bike, GameField> {
 
     public Player(EventListener listener, String playerName) {
         super(listener);
-        this.name = playerName;
+        this.name = StringUtils.isNotEmpty(playerName) ? playerName : "player" + new Random().nextLong();
     }
 
     public Bike getHero() {
@@ -55,7 +56,7 @@ public class Player extends GamePlayer<Bike, GameField> {
             gameField.removeFallenBike(bike);
         }
         Point freePosition = gameField.findFreePosition();
-        bike = new Bike(freePosition);
+        bike = new Bike(freePosition, name);
         bike.init(gameField);
     }
 

@@ -33,7 +33,6 @@ import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
 import java.util.Objects;
-import java.util.Random;
 
 import static com.codenjoy.dojo.excitebike.model.elements.BikeType.BIKE;
 import static com.codenjoy.dojo.excitebike.model.elements.BikeType.BIKE_AT_ACCELERATOR;
@@ -67,7 +66,7 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
     public static final String AT_LINE_CHANGER_UP_SUFFIX = "_AT_LINE_CHANGER_UP";
     public static final String AT_LINE_CHANGER_DOWN_SUFFIX = "_AT_LINE_CHANGER_DOWN";
 
-    private final long id = new Random().nextLong();
+    private final String playerName;
     private Direction command;
     private Movement movement = new Movement();
     private BikeType type = BIKE;
@@ -79,16 +78,18 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
     private boolean adjusted;
     private boolean movementLock;
 
-    public Bike(Point xy) {
+    public Bike(Point xy, String playerName) {
         super(xy);
+        this.playerName = playerName;
     }
 
-    public Bike(int x, int y) {
+    public Bike(int x, int y, String playerName) {
         super(x, y);
+        this.playerName = playerName;
     }
 
-    public long getId() {
-        return id;
+    public String getPlayerName() {
+        return playerName;
     }
 
     @Override
@@ -148,7 +149,7 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
             executeCommand();
             tryToMove();
             adjustStateToElement();
-            if(!isAlive()){
+            if (!isAlive()) {
                 field.getPlayerOfBike(this).event(Events.LOSE);
             }
         }
@@ -454,18 +455,18 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Bike bike = (Bike) o;
-        return id == bike.id;
+        return playerName.equals(bike.playerName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(playerName);
     }
 
     @Override
     public String toString() {
         return "Bike{" +
-                "id=" + id +
+                "playerName=" + playerName +
                 ", command=" + command +
                 ", movement=" + movement +
                 ", type=" + type +

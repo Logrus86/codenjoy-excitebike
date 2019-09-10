@@ -27,7 +27,6 @@ import com.codenjoy.dojo.excitebike.model.items.Fence;
 import com.codenjoy.dojo.excitebike.model.items.Inhibitor;
 import com.codenjoy.dojo.excitebike.model.items.LineChanger;
 import com.codenjoy.dojo.excitebike.model.items.Obstacle;
-import com.codenjoy.dojo.excitebike.model.items.Bike;
 import com.codenjoy.dojo.excitebike.model.items.SpringboardElement;
 
 import java.util.List;

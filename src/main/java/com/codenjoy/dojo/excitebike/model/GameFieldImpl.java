@@ -59,7 +59,6 @@ import static com.codenjoy.dojo.excitebike.model.elements.SpringboardElementType
 import static com.codenjoy.dojo.excitebike.model.elements.SpringboardElementType.SPRINGBOARD_RIGHT_DOWN;
 import static com.codenjoy.dojo.excitebike.model.elements.SpringboardElementType.SPRINGBOARD_RIGHT_UP;
 import static com.codenjoy.dojo.excitebike.model.elements.SpringboardElementType.SPRINGBOARD_TOP;
-import static com.codenjoy.dojo.excitebike.model.items.Bike.OTHER_BIKE_PREFIX;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static java.util.stream.Collectors.toList;
 
@@ -187,7 +186,7 @@ public class GameFieldImpl implements GameField {
         return player != null ?
                 players.parallelStream()
                         .map(Player::getHero)
-                        .filter(bike -> bike != null && bike.getId() != player.getHero().getId() && bike.itsMe(x, y))
+                        .filter(bike -> bike != null && !bike.getPlayerName().equals(player.getHero().getPlayerName()) && bike.itsMe(x, y))
                         .findFirst()
                 : Optional.empty();
     }
@@ -312,7 +311,10 @@ public class GameFieldImpl implements GameField {
 
     @Override
     public Player getPlayerOfBike(Bike bike) {
-        return players.parallelStream().filter(p -> p.getHero().getId() == bike.getId()).findFirst().orElse(null);
+        return players.parallelStream()
+                .filter(p -> p.getHero() != null && p.getHero().getPlayerName().equals(bike.getPlayerName()))
+                .findFirst()
+                .orElse(null);
     }
 
     @Override
