@@ -321,7 +321,7 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
             if (enemy.movement.isDown()) {
                 enemyDestinationY = DOWN.changeY(enemyDestinationY);
             }
-            Optional<Bike> enemyOfTheEnemy = field.getEnemyBike(enemyDestinationX, enemyDestinationY, field.getPlayerOfBike(this));
+            Optional<Bike> enemyOfTheEnemy = field.getEnemyBike(enemyDestinationX, enemyDestinationY, field.getPlayerOfBike(enemy));
             return enemyOfTheEnemy.isPresent() && twoBikesAreMovingUpOrDownToEachOther(enemy, enemyOfTheEnemy.get());
         }
         return false;
