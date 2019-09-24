@@ -32,7 +32,7 @@ namespace BikeClient
     {
         private const int ReceiveChunkSize = 1024 * 10;
         private const bool Verbose = true;
-        private const string GameServerUri = "http://10.6.193.111:8080/codenjoy-contest/board/player/myhplfk0iog9fisfzyrp?code=5347336919005689433";
+        private const string GameServerUri = "http://10.6.193.111:8080/codenjoy-contest/board/player/ntgk9j9kf544p5tuiapm?code=1972210637167945904";
         private static readonly object ConsoleLock = new object();
         private static readonly Encoding Encoder = new UTF8Encoding(false);
         private static readonly AiSolver PlayGround = new AiSolver();
